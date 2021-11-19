@@ -12,6 +12,14 @@
 #include "blas.h"
 #include "assert.h"
 #include "dark_cuda.h"
+#include "detection_layer.h"
+
+#include "region_layer.h"
+#include "cost_layer.h"
+#include "box.h"
+#include "image.h"
+#include "darknet.h"
+#include "http_stream.h"
 
 #define ALEXNET_SEC 0
 #define ALEXNET_NSEC 100000000 // 100ms
@@ -100,7 +108,6 @@ void *set_classification_thread(void *arg)
     
     args->idx = idx;
     args->datacfg = data;
-    printf("check data: %s\n", args->datacfg);
     args->cfgfile = cfg;
     args->weightfile = weights;
     args->cam_index = cam_index;
@@ -108,13 +115,14 @@ void *set_classification_thread(void *arg)
     args->benchmark = benchmark;
     args->benchmark_layers = benchmark_layers;
 
-    int err = pthread_create(&demo_thread[idx-1], NULL, demo_classification_thread, (void *) args);
+    int err = pthread_create(&demo_thread[idx], NULL, demo_classification_thread, (void *) args);
     if (err < 0) {
         perror("Detector thread create error : ");
         exit(0);
     }
 
-//    free(args);
+    while (!dnn_buffer[idx].on) {};
+    free(args);
 
     printf("---------------------------- Creat Complete\n");
     while(1) {
@@ -178,6 +186,70 @@ void *set_detection_thread(void *arg)
     printf("     Period: %ld ms\n", dnn_buffer[idx].period.tv_nsec/1000000);
     printf("   Priority: %d\n", dnn_buffer[idx].prior);
     
+    int dont_show = find_arg(argc, argv, "-dont_show");
+    int benchmark = find_arg(argc, argv, "-benchmark");
+    int benchmark_layers = find_arg(argc, argv, "-benchmark_layers");
+    //if (benchmark_layers) benchmark = 1;
+    if (benchmark) dont_show = 1;
+    int letter_box = find_arg(argc, argv, "-letter_box");
+    int mjpeg_port = find_int_arg(argc, argv, "-mjpeg_port", -1);
+    int avgframes = find_int_arg(argc, argv, "-avgframes", 3);
+    int dontdraw_bbox = find_arg(argc, argv, "-dontdraw_bbox");
+    int json_port = find_int_arg(argc, argv, "-json_port", -1);
+    char *http_post_host = find_char_arg(argc, argv, "-http_post_host", 0);
+    int time_limit_sec = find_int_arg(argc, argv, "-time_limit_sec", 0);
+    char *out_filename = find_char_arg(argc, argv, "-out_filename", 0);
+    char *prefix = find_char_arg(argc, argv, "-prefix", 0);
+    float thresh = find_float_arg(argc, argv, "-thresh", .25);    // 0.24
+    float hier_thresh = find_float_arg(argc, argv, "-hier", .5);
+    int cam_index = find_int_arg(argc, argv, "-c", 0);
+    int frame_skip = find_int_arg(argc, argv, "-s", 0);
+    int ext_output = find_arg(argc, argv, "-ext_output");
+    
+    char *datacfg = argv[5];
+    char *cfg = argv[7];
+    char *weights = (argc > 8) ? argv[8] : 0;
+    if (weights)
+        if (strlen(weights) > 0)
+            if (weights[strlen(weights) - 1] == 0x0d) weights[strlen(weights) - 1] = 0;
+    char *filename = (argc > 11) ? argv[11] : 0;
+
+
+
+
+    DemoDetector *args = (DemoDetector *)malloc(sizeof(DemoDetector));
+    
+    args->idx = idx;
+    args->cfgfile = cfg;
+    args->weightfile = weights;
+    args->thresh = thresh;
+    args->hier_thresh = hier_thresh;
+    args->cam_index = cam_index;
+    args->filename = filename;
+    args->names = names;
+    args->classes = classes;
+    args->avgframes = avgframes;
+    args->frame_skip = frame_skip;
+    args->prefix = prefix;
+    args->out_filename = out_filename;
+    args->mjpeg_port = mjpeg_port;
+    args->dontdraw_bbox = dontdraw_bbox;
+    args->json_port = json_port;
+    args->ext_output = ext_output;
+    args->letter_box = letter_box;
+    args->time_limit_sec = time_limit_sec;
+    args->http_post_host = http_post_host;
+    args->benchmark = benchmark;
+    args->benchmark_layers = benchmark_layers;
+
+    int err = pthread_create(&demo_thread[idx], NULL, demo_detector_thread, (void *) args);
+    if (err < 0) {
+        perror("Detector thread create error : ");
+        exit(0);
+    }
+
+    while (!dnn_buffer[idx].on) {};
+    free(args);
 
     printf("---------------------------- Creat Complete\n");
     
@@ -198,7 +270,7 @@ void *set_detection_thread(void *arg)
 void *demo_classification_thread(void *arg)
 {
 #ifdef OPENCV
-    printf("Classifier Demo\n");
+    printf("- Classifier Demo\n");
 
     DemoClassi *argm = (DemoClassi *)arg;
     int idx = argm->idx;
@@ -210,12 +282,12 @@ void *demo_classification_thread(void *arg)
     int benchmark = argm->benchmark;
     int benchmark_layers = argm->benchmark_layers;
 
-    printf("       idx: %d\n", idx);
-    printf("   datacfg: %s\n", datacfg);
-    printf("   cfgfile: %s\n", cfgfile);
-    printf("weightfile: %s\n", weightfile);
-    printf(" cam_index: %d\n", cam_index);
-    printf("  filename: %s\n", filename);
+    printf("        idx: %d\n", idx);
+    printf("    Datacfg: %s\n", datacfg);
+    printf("    Cfgfile: %s\n", cfgfile);
+    printf(" Weightfile: %s\n", weightfile);
+    printf("  Cam_index: %d\n", cam_index);
+    printf("   Filename: %s\n", filename);
 
     network net = parse_network_cfg_custom(cfgfile, 1, 0);
     if(weightfile){
