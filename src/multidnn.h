@@ -7,6 +7,16 @@ typedef enum KindofLayer {
 
 };
 */
+typedef struct DEMO_CLASSI {
+    int idx;
+    char *datacfg;
+    char *cfgfile;
+    char *weightfile;
+    int cam_index;
+    const char *filename;
+    int benchmark;
+    int benchmark_layers;
+} DemoClassi;
 
 typedef struct ARGS {
     int idx;
@@ -39,5 +49,7 @@ typedef struct MULTI_DNN {
 
 void *classification_thread(void *arg);
 void *detection_thread(void *arg);
+
+void *demo_classification_thread(void *arg);
 
 void run_multidnn(int argc, char **argv);
