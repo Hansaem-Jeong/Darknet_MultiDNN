@@ -707,8 +707,10 @@ void rgbgr_image(image im)
 void show_image(image p, const char *name)
 {
 #ifdef OPENCV
+    printf("show image cv check 1\n");
     show_image_cv(p, name);
 #else
+    printf("show image cv check 1-1\n");
     fprintf(stderr, "Not compiled with OpenCV, saving to %s.png instead\n", name);
     save_image(p, name);
 #endif  // OPENCV

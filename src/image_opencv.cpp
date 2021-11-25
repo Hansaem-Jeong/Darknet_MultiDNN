@@ -358,15 +358,20 @@ image mat_to_image_cv(mat_cv *mat)
 extern "C" void create_window_cv(char const* window_name, int full_screen, int width, int height)
 {
     try {
+        printf("window %s check 1\n", window_name);
         int window_type = cv::WINDOW_NORMAL;
 #ifdef CV_VERSION_EPOCH // OpenCV 2.x
         if (full_screen) window_type = CV_WINDOW_FULLSCREEN;
 #else
         if (full_screen) window_type = cv::WINDOW_FULLSCREEN;
 #endif
+        printf("window %s check 2\n", window_name);
         cv::namedWindow(window_name, window_type);
+        printf("window %s check 3\n", window_name);
         cv::moveWindow(window_name, 0, 0);
+        printf("window %s check 4\n", window_name);
         cv::resizeWindow(window_name, width, height);
+        printf("window %s check 5\n", window_name);
     }
     catch (...) {
         cerr << "OpenCV exception: create_window_cv \n";
@@ -457,13 +462,16 @@ static float get_pixel(image m, int x, int y, int c)
 extern "C" void show_image_cv(image p, const char *name)
 {
     try {
+        printf("show image cv check 2\n");
         image copy = copy_image(p);
         constrain_image(copy);
 
         cv::Mat mat = image_to_mat(copy);
         if (mat.channels() == 3) cv::cvtColor(mat, mat, cv::COLOR_RGB2BGR);
         else if (mat.channels() == 4) cv::cvtColor(mat, mat, cv::COLOR_RGBA2BGR);
+        printf("show image cv check 3\n");
         cv::namedWindow(name, cv::WINDOW_NORMAL);
+        printf("show image cv check 4\n");
         cv::imshow(name, mat);
         free_image(copy);
     }

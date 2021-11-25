@@ -11,13 +11,18 @@ ACTIVE	include/darknet.h	/^    ACTIVE,$/;"	e	enum:__anon24
 ADD	include/darknet.h	/^    MULT, ADD, SUB, DIV$/;"	e	enum:__anon23
 ADDRPOINTER	src/http_stream.cpp	36;"	d	file:
 AI2	src/convolutional_layer.c	23;"	d	file:
+ALEXNET_NSEC	src/multidnn.c	30;"	d	file:
+ALEXNET_PRIOR	src/multidnn.c	31;"	d	file:
+ALEXNET_SEC	src/multidnn.c	29;"	d	file:
 APPNAMESO	Makefile	/^APPNAMESO=uselib$/;"	m
 ARCH	Makefile	/^ARCH= -gencode arch=compute_35,code=sm_35 \\$/;"	m
 ARCH	Makefile	/^ARCH= -gencode arch=compute_72,code=[sm_72,compute_72]$/;"	m
+ARGS	src/multidnn.h	/^typedef struct ARGS {$/;"	s
 ASN1_STRING_get0_data	src/httplib.h	/^inline const unsigned char *ASN1_STRING_get0_data(const ASN1_STRING *asn1) {$/;"	f
 AVGPOOL	include/darknet.h	/^    AVGPOOL,$/;"	e	enum:__anon24
 AVGPOOL_LAYER_H	src/avgpool_layer.h	2;"	d
 AVX	Makefile	/^AVX=0$/;"	m
+Args	src/multidnn.h	/^} Args;$/;"	t	typeref:struct:ARGS
 B1	include/darknet.h	/^    float B1;$/;"	m	struct:layer
 B1	include/darknet.h	/^    float B1;$/;"	m	struct:network
 B1	include/darknet.h	/^    float B1;$/;"	m	struct:update_args
@@ -58,6 +63,7 @@ CLOCK_REALTIME	src/gettimeofday.h	9;"	d
 COL2IM_H	src/col2im.h	2;"	d
 COMMON	Makefile	/^COMMON= -Iinclude\/ -I3rdparty\/stb\/include$/;"	m
 COMPARE_DATA	include/darknet.h	/^    CLASSIFICATION_DATA, DETECTION_DATA, CAPTCHA_DATA, REGION_DATA, IMAGE_DATA, COMPARE_DATA, WRITING_DATA, SWAG_DATA, TAG_DATA, OLD_CLASSIFICATION_DATA, STUDY_DATA, DET_DATA, SUPER_DATA, LETTERBOX_DATA, REGRESSION_DATA, SEGMENTATION_DATA, INSTANCE_DATA, ISEG_DATA$/;"	e	enum:__anon27
+CONFIG_DETECTOR	src/multidnn.h	/^typedef struct CONFIG_DETECTOR {$/;"	s
 CONNECTED	include/darknet.h	/^    CONNECTED,$/;"	e	enum:__anon24
 CONNECTED_LAYER_H	src/connected_layer.h	2;"	d
 CONSTANT	include/darknet.h	/^    CONSTANT, STEP, EXP, POLY, STEPS, SIG, RANDOM, SGDR$/;"	e	enum:__anon26
@@ -96,7 +102,11 @@ CYCLE_OFFSET	src/avees.c	62;"	d	file:
 C_SHARP_MAX_OBJECTS	include/yolo_v2_class.hpp	20;"	d
 Client	src/httplib.h	/^class Client {$/;"	c	namespace:httplib
 Client	src/httplib.h	/^inline Client::Client(const char *host, int port, time_t timeout_sec)$/;"	f	class:httplib::Client
+ConfigDetector	src/multidnn.h	/^} ConfigDetector;$/;"	t	typeref:struct:CONFIG_DETECTOR
 DARKCUDA_H	src/dark_cuda.h	2;"	d
+DARKNET19_NSEC	src/multidnn.c	34;"	d	file:
+DARKNET19_PRIOR	src/multidnn.c	35;"	d	file:
+DARKNET19_SEC	src/multidnn.c	33;"	d	file:
 DARKNET_API	include/darknet.h	2;"	d
 DARKNET_LOC	src/utils.h	18;"	d
 DATA_H	src/data.h	2;"	d
@@ -104,8 +114,13 @@ DEBUG	Makefile	/^DEBUG=0$/;"	m
 DECONVOLUTIONAL	include/darknet.h	/^    DECONVOLUTIONAL,$/;"	e	enum:__anon24
 DECONVOLUTIONAL_LAYER_H	src/deconvolutional_layer.h	2;"	d
 DEFAULT_NMS	include/darknet.h	/^    DEFAULT_NMS, GREEDY_NMS, DIOU_NMS, CORNERS_NMS$/;"	e	enum:__anon18
+DEMO_CLASSI	src/multidnn.h	/^typedef struct DEMO_CLASSI {$/;"	s
+DEMO_DETECTOR	src/multidnn.h	/^typedef struct DEMO_DETECTOR {$/;"	s
 DEMO_H	src/avees.h	2;"	d
 DEMO_H	src/demo.h	2;"	d
+DENSENET201_NSEC	src/multidnn.c	38;"	d	file:
+DENSENET201_PRIOR	src/multidnn.c	39;"	d	file:
+DENSENET201_SEC	src/multidnn.c	37;"	d	file:
 DEPS	Makefile	/^DEPS = $(wildcard src\/*.h) Makefile include\/darknet.h$/;"	m
 DETECTION	build/darknet/x64/darknet.py	/^class DETECTION(Structure):$/;"	c
 DETECTION	darknet.py	/^class DETECTION(Structure):$/;"	c
@@ -129,6 +144,8 @@ Darknet	src/csharp/YoloCSharpWrapper.cs	/^namespace Darknet$/;"	n
 Delete	src/httplib.h	/^inline Server &Server::Delete(const char *pattern, Handler handler) {$/;"	f	class:httplib::Server
 Delete	src/httplib.h	/^inline std::shared_ptr<Response> Client::Delete(const char *path) {$/;"	f	class:httplib::Client
 Delete	src/httplib.h	/^inline std::shared_ptr<Response> Client::Delete(const char *path,$/;"	f	class:httplib::Client
+DemoClassi	src/multidnn.h	/^} DemoClassi;$/;"	t	typeref:struct:DEMO_CLASSI
+DemoDetector	src/multidnn.h	/^} DemoDetector;$/;"	t	typeref:struct:DEMO_DETECTOR
 Detect	build/darknet/YoloWrapper.cs	/^        public bbox_t[] Detect(byte[] imageData)$/;"	m	class:Darknet.YoloWrapper
 Detect	build/darknet/YoloWrapper.cs	/^        public bbox_t[] Detect(string filename)$/;"	m	class:Darknet.YoloWrapper
 Detect	src/csharp/YoloCSharpWrapper.cs	/^        public bbox_t[] Detect(byte[] imageData)$/;"	m	class:Darknet.YoloWrapper
@@ -256,7 +273,6 @@ InitializeYolo	src/csharp/YoloCSharpWrapper.cs	/^        private static extern i
 JPG	include/darknet.h	/^    PNG, BMP, TGA, JPG$/;"	e	enum:__anon22
 JSON_sender	src/http_stream.cpp	/^    JSON_sender(int port = 0, int _timeout = 400000)$/;"	f	class:JSON_sender
 JSON_sender	src/http_stream.cpp	/^class JSON_sender$/;"	c	file:
-KindofLayer	include/multidnn.h	/^typedef enum KindofLayer {$/;"	g
 L1	include/darknet.h	/^    SSE, MASKED, L1, SEG, SMOOTH,WGAN$/;"	e	enum:__anon25
 L2NORM	include/darknet.h	/^    L2NORM,$/;"	e	enum:__anon24
 LAYER_TYPE	include/darknet.h	/^} LAYER_TYPE;$/;"	t	typeref:enum:__anon24
@@ -300,13 +316,14 @@ MJPG_sender	src/http_stream.cpp	/^    MJPG_sender(int port = 0, int _timeout = 4
 MJPG_sender	src/http_stream.cpp	/^class MJPG_sender$/;"	c	file:
 MSE	include/darknet.h	/^    IOU, GIOU, MSE, DIOU, CIOU$/;"	e	enum:__anon17
 MULT	include/darknet.h	/^    MULT, ADD, SUB, DIV$/;"	e	enum:__anon23
-MULTI_DNN	include/multidnn.h	/^typedef struct MULTI_DNN {$/;"	s
+MULTIDNN	Makefile	/^MULTIDNN=1$/;"	m
+MULTI_DNN	src/multidnn.h	/^typedef struct MULTI_DNN {$/;"	s
 M_PI	src/box.c	8;"	d	file:
 M_PI	src/gaussian_yolo_layer.c	20;"	d	file:
 M_PI	src/utils.h	11;"	d
 MaxObjects	build/darknet/YoloWrapper.cs	/^        private const int MaxObjects = 1000;$/;"	f	class:Darknet.YoloWrapper	file:
 MaxObjects	src/csharp/YoloCSharpWrapper.cs	/^        private const int MaxObjects = 1000;$/;"	f	class:Darknet.YoloWrapper	file:
-MultiDNN	include/multidnn.h	/^} MultiDNN;$/;"	t	typeref:struct:MULTI_DNN
+MultiDNN	src/multidnn.h	/^} MultiDNN;$/;"	t	typeref:struct:MULTI_DNN
 MultipartFile	src/httplib.h	/^struct MultipartFile {$/;"	s	namespace:httplib
 MultipartFormData	src/httplib.h	/^struct MultipartFormData {$/;"	s	namespace:httplib
 NEED_ERRNO	3rdparty/pthreads/include/pthread.h	245;"	d
@@ -333,7 +350,7 @@ NUMCHARS	src/data.c	14;"	d	file:
 NVCC	Makefile	/^NVCC=nvcc$/;"	m
 NoThread	src/httplib.h	/^  NoThread() {}$/;"	f	class:httplib::NoThread
 NoThread	src/httplib.h	/^class NoThread : public TaskQueue {$/;"	c	namespace:httplib
-OBJ	Makefile	/^OBJ=image_opencv.o http_stream.o gemm.o utils.o dark_cuda.o convolutional_layer.o list.o image.o activations.o im2col.o col2im.o blas.o crop_layer.o dropout_layer.o maxpool_layer.o softmax_layer.o data.o matrix.o network.o connected_layer.o cost_layer.o parser.o option_list.o darknet.o detection_layer.o captcha.o route_layer.o writing.o box.o nightmare.o normalization_layer.o avgpool_layer.o coco.o dice.o yolo.o detector.o layer.o compare.o classifier.o local_layer.o swag.o shortcut_layer.o representation_layer.o activation_layer.o rnn_layer.o gru_layer.o rnn.o rnn_vid.o crnn_layer.o demo.o tag.o cifar.o go.o batchnorm_layer.o art.o region_layer.o reorg_layer.o reorg_old_layer.o super.o voxel.o tree.o yolo_layer.o gaussian_yolo_layer.o upsample_layer.o lstm_layer.o conv_lstm_layer.o scale_channels_layer.o sam_layer.o avees.o$/;"	m
+OBJ	Makefile	/^OBJ=image_opencv.o http_stream.o gemm.o utils.o dark_cuda.o convolutional_layer.o list.o image.o activations.o im2col.o col2im.o blas.o crop_layer.o dropout_layer.o maxpool_layer.o softmax_layer.o data.o matrix.o network.o connected_layer.o cost_layer.o parser.o option_list.o darknet.o detection_layer.o captcha.o route_layer.o writing.o box.o nightmare.o normalization_layer.o avgpool_layer.o coco.o dice.o yolo.o detector.o layer.o compare.o classifier.o local_layer.o swag.o shortcut_layer.o representation_layer.o activation_layer.o rnn_layer.o gru_layer.o rnn.o rnn_vid.o crnn_layer.o demo.o tag.o cifar.o go.o batchnorm_layer.o art.o region_layer.o reorg_layer.o reorg_old_layer.o super.o voxel.o tree.o yolo_layer.o gaussian_yolo_layer.o upsample_layer.o lstm_layer.o conv_lstm_layer.o scale_channels_layer.o sam_layer.o avees.o multidnn.o$/;"	m
 OBJDIR	Makefile	/^OBJDIR=.\/obj\/$/;"	m
 OBJS	Makefile	/^OBJS = $(addprefix $(OBJDIR), $(OBJ))$/;"	m
 OCV_D	src/image_opencv.cpp	45;"	d	file:
@@ -660,6 +677,8 @@ Stream	src/httplib.h	/^class Stream {$/;"	c	namespace:httplib
 TAG_DATA	include/darknet.h	/^    CLASSIFICATION_DATA, DETECTION_DATA, CAPTCHA_DATA, REGION_DATA, IMAGE_DATA, COMPARE_DATA, WRITING_DATA, SWAG_DATA, TAG_DATA, OLD_CLASSIFICATION_DATA, STUDY_DATA, DET_DATA, SUPER_DATA, LETTERBOX_DATA, REGRESSION_DATA, SEGMENTATION_DATA, INSTANCE_DATA, ISEG_DATA$/;"	e	enum:__anon27
 TANH	include/darknet.h	/^    LOGISTIC, RELU, RELU6, RELIE, LINEAR, RAMP, TANH, PLSE, REVLEAKY, LEAKY, ELU, LOGGY, STAIR, HARDTAN, LHTAN, SELU, GELU, SWISH, MISH, HARD_MISH, NORM_CHAN, NORM_CHAN_SOFTMAX, NORM_CHAN_SOFTMAX_MAXVAL$/;"	e	enum:__anon16
 TGA	include/darknet.h	/^    PNG, BMP, TGA, JPG$/;"	e	enum:__anon22
+THREAD_SLEEP_NSEC	src/multidnn.c	51;"	d	file:
+THREAD_SLEEP_SEC	src/multidnn.c	50;"	d	file:
 TILE_K	src/gemm.c	46;"	d	file:
 TILE_M	src/gemm.c	44;"	d	file:
 TILE_N	src/gemm.c	45;"	d	file:
@@ -702,10 +721,17 @@ XNOR	include/darknet.h	/^    XNOR,$/;"	e	enum:__anon24
 X_OK	src/darkunistd.h	24;"	d
 YCbCr_to_RGB_kernel	3rdparty/stb/include/stb_image.h	/^   void (*YCbCr_to_RGB_kernel)(stbi_uc *out, const stbi_uc *y, const stbi_uc *pcb, const stbi_uc *pcr, int count, int step);$/;"	m	struct:__anon36
 YOLO	include/darknet.h	/^    YOLO,$/;"	e	enum:__anon24
+YOLOV2_NSEC	src/multidnn.c	43;"	d	file:
+YOLOV2_SEC	src/multidnn.c	42;"	d	file:
+YOLOV3_NSEC	src/multidnn.c	45;"	d	file:
+YOLOV3_SEC	src/multidnn.c	44;"	d	file:
+YOLOV4_NSEC	src/multidnn.c	47;"	d	file:
+YOLOV4_SEC	src/multidnn.c	46;"	d	file:
 YOLO_CENTER	include/darknet.h	/^    YOLO_CENTER = 1 << 0, YOLO_LEFT_TOP = 1 << 1, YOLO_RIGHT_BOTTOM = 1 << 2$/;"	e	enum:__anon19
 YOLO_LAYER_H	src/yolo_layer.h	2;"	d
 YOLO_LEFT_TOP	include/darknet.h	/^    YOLO_CENTER = 1 << 0, YOLO_LEFT_TOP = 1 << 1, YOLO_RIGHT_BOTTOM = 1 << 2$/;"	e	enum:__anon19
 YOLO_POINT	include/darknet.h	/^} YOLO_POINT;$/;"	t	typeref:enum:__anon19
+YOLO_PRIOR	src/multidnn.c	48;"	d	file:
 YOLO_RIGHT_BOTTOM	include/darknet.h	/^    YOLO_CENTER = 1 << 0, YOLO_LEFT_TOP = 1 << 1, YOLO_RIGHT_BOTTOM = 1 << 2$/;"	e	enum:__anon19
 YOLO_V2_CLASS_HPP	include/yolo_v2_class.hpp	2;"	d
 YoloLibraryName	build/darknet/YoloWrapper.cs	/^        private const string YoloLibraryName = "yolo_cpp_dll.dll";$/;"	f	class:Darknet.YoloWrapper	file:
@@ -842,6 +868,7 @@ antialiasing	include/darknet.h	/^    int antialiasing;$/;"	m	struct:layer
 app14_color_transform	3rdparty/stb/include/stb_image.h	/^   int            app14_color_transform; \/\/ Adobe APP14 tag$/;"	m	struct:__anon36
 append	src/httplib.h	/^  void append(char c) {$/;"	f	class:httplib::detail::stream_line_reader
 arg	3rdparty/pthreads/include/pthread.h	/^  void *arg;$/;"	m	struct:ptw32_cleanup_t
+argc	src/multidnn.h	/^    int argc;$/;"	m	struct:ARGS
 args	build/darknet/x64/darknet_video.py	/^    args = parser()$/;"	v
 args	build/darknet/x64/reval_voc_py3.py	/^    args = parse_args()$/;"	v
 args	darknet_video.py	/^    args = parser()$/;"	v
@@ -849,6 +876,7 @@ args	scripts/log_parser/log_parser.py	/^    args = parse_args()$/;"	v
 args	scripts/reval_voc.py	/^    args = parse_args()$/;"	v
 args	scripts/reval_voc_py3.py	/^    args = parse_args()$/;"	v
 args_swap	src/data.c	/^static load_args * args_swap = NULL;$/;"	v	file:
+argv	src/multidnn.h	/^    char **argv;$/;"	m	struct:ARGS
 asm_cpuid	src/gemm.c	/^void asm_cpuid(uint32_t* abcd, uint32_t eax)$/;"	f
 aspect	include/darknet.h	/^    float aspect;$/;"	m	struct:load_args
 aspect	include/darknet.h	/^    float aspect;$/;"	m	struct:network
@@ -875,6 +903,9 @@ avg_IOU	scripts/gen_anchors.py	/^def avg_IOU(X,centroids):$/;"	f
 avg_flipped_yolo	src/yolo_layer.c	/^void avg_flipped_yolo(layer l)$/;"	f
 avg_frames	src/avees.c	/^static int avg_frames;$/;"	v	file:
 avg_frames	src/demo.c	/^static int avg_frames;$/;"	v	file:
+avg_frames	src/multidnn.c	/^static int avg_frames;$/;"	v	file:
+avgframes	src/multidnn.h	/^    int avgframes;$/;"	m	struct:CONFIG_DETECTOR
+avgframes	src/multidnn.h	/^    int avgframes;$/;"	m	struct:DEMO_DETECTOR
 avgpool	include/darknet.h	/^    int avgpool;$/;"	m	struct:layer
 avgpool_layer	src/avgpool_layer.h	/^typedef layer avgpool_layer;$/;"	t
 axpy_cpu	src/blas.c	/^void axpy_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY)$/;"	f
@@ -981,7 +1012,13 @@ bd_algo	include/darknet.h	/^    UNUSED_ENUM_TYPE bd_algo, bd_algo16;$/;"	m	struc
 bd_algo	include/darknet.h	/^    cudnnConvolutionBwdDataAlgo_t bd_algo, bd_algo16;$/;"	m	struct:layer
 bd_algo16	include/darknet.h	/^    UNUSED_ENUM_TYPE bd_algo, bd_algo16;$/;"	m	struct:layer
 bd_algo16	include/darknet.h	/^    cudnnConvolutionBwdDataAlgo_t bd_algo, bd_algo16;$/;"	m	struct:layer
+benchmark	src/multidnn.h	/^    int benchmark;$/;"	m	struct:CONFIG_DETECTOR
+benchmark	src/multidnn.h	/^    int benchmark;$/;"	m	struct:DEMO_CLASSI
+benchmark	src/multidnn.h	/^    int benchmark;$/;"	m	struct:DEMO_DETECTOR
 benchmark_layers	include/darknet.h	/^    int benchmark_layers;$/;"	m	struct:network
+benchmark_layers	src/multidnn.h	/^    int benchmark_layers; $/;"	m	struct:CONFIG_DETECTOR
+benchmark_layers	src/multidnn.h	/^    int benchmark_layers; $/;"	m	struct:DEMO_DETECTOR
+benchmark_layers	src/multidnn.h	/^    int benchmark_layers;$/;"	m	struct:DEMO_CLASSI
 best_3d_shift	src/image.cpp	/^int best_3d_shift(image a, image b, int min, int max)$/;"	f
 best_3d_shift_r	src/image.cpp	/^int best_3d_shift_r(image a, image b, int min, int max)$/;"	f
 best_class	src/box.h	/^	int best_class;$/;"	m	struct:detection_with_class
@@ -1096,6 +1133,9 @@ calculate_liberties	src/go.c	/^int *calculate_liberties(float *board)$/;"	f
 calculate_loss	src/nightmare.c	/^void calculate_loss(float *output, float *delta, int n, float thresh)$/;"	f
 callback_mouse_click	src/image_opencv.cpp	/^void callback_mouse_click(int event, int x, int y, int flags, void* user_data)$/;"	f
 calloc_error	src/utils.c	/^void calloc_error(const size_t size, const char * const filename, const char * const funcname, const int line)$/;"	f
+cam_index	src/multidnn.h	/^    int cam_index;$/;"	m	struct:CONFIG_DETECTOR
+cam_index	src/multidnn.h	/^    int cam_index;$/;"	m	struct:DEMO_CLASSI
+cam_index	src/multidnn.h	/^    int cam_index;$/;"	m	struct:DEMO_DETECTOR
 can_compress	src/httplib.h	/^inline bool can_compress(const std::string &content_type) {$/;"	f	namespace:httplib::detail
 candidates	build/darknet/YoloWrapper.cs	/^            public bbox_t[] candidates;$/;"	f	struct:Darknet.YoloWrapper.BboxContainer
 candidates	include/yolo_v2_class.hpp	/^    bbox_t candidates[C_SHARP_MAX_OBJECTS];$/;"	m	struct:bbox_t_container
@@ -1104,6 +1144,7 @@ cap	build/darknet/x64/darknet_video.py	/^    cap = cv2.VideoCapture(input_path)$
 cap	darknet_video.py	/^    cap = cv2.VideoCapture(input_path)$/;"	v
 cap	src/avees.c	/^static cap_cv *cap;$/;"	v	file:
 cap	src/demo.c	/^static cap_cv *cap;$/;"	v	file:
+cap	src/multidnn.c	/^static cap_cv *cap;$/;"	v	file:
 cap_cv	src/image_opencv.h	/^typedef void* cap_cv;$/;"	t
 catch	3rdparty/pthreads/include/pthread.h	1342;"	d
 cell_cpu	include/darknet.h	/^    float *cell_cpu;$/;"	m	struct:layer
@@ -1112,6 +1153,9 @@ center	include/darknet.h	/^    int center;$/;"	m	struct:load_args
 center	include/darknet.h	/^    int center;$/;"	m	struct:network
 centers	scripts/kmeansiou.c	/^    matrix centers;$/;"	m	struct:__anon53	file:
 centers	src/matrix.h	/^    matrix centers;$/;"	m	struct:__anon1
+cfgfile	src/multidnn.h	/^    char *cfgfile;$/;"	m	struct:CONFIG_DETECTOR
+cfgfile	src/multidnn.h	/^    char *cfgfile;$/;"	m	struct:DEMO_CLASSI
+cfgfile	src/multidnn.h	/^    char *cfgfile;$/;"	m	struct:DEMO_DETECTOR
 change_leaves	src/tree.c	/^void change_leaves(tree *t, char *leaf_list)$/;"	f
 channel	3rdparty/stb/include/stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon45
 channel_order	3rdparty/stb/include/stb_image.h	/^   int channel_order;$/;"	m	struct:__anon33
@@ -1153,8 +1197,11 @@ classes	scripts/reval_voc_py3.py	/^    classes = [t.strip('\\n') for t in lines]
 classes	scripts/voc_label.py	/^classes = ["aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"]$/;"	v
 classes	scripts/voc_label_difficult.py	/^classes = ["aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"]$/;"	v
 classes	src/compare.c	/^    int classes;$/;"	m	struct:__anon8	file:
+classes	src/multidnn.h	/^    int classes;$/;"	m	struct:CONFIG_DETECTOR
+classes	src/multidnn.h	/^    int classes;$/;"	m	struct:DEMO_DETECTOR
 classes_multipliers	include/darknet.h	/^    float *classes_multipliers;$/;"	m	struct:layer
 classfix	include/darknet.h	/^    int classfix;$/;"	m	struct:layer
+classification_display_flag	src/multidnn.c	/^int classification_display_flag;$/;"	v
 cleanUpRout	3rdparty/pthreads/include/pthread.h	/^      ptw32_cleanup_callback_t cleanUpRout;$/;"	m	class:PThreadCleanup
 clear_old_states	include/yolo_v2_class.hpp	/^    void clear_old_states() {$/;"	f	class:track_kalman_t
 clip	include/darknet.h	/^    float clip;$/;"	m	struct:layer
@@ -1206,7 +1253,7 @@ compare_gaussian_yolo_class	src/gaussian_yolo_layer.c	/^int compare_gaussian_yol
 compare_networks	src/network.c	/^void compare_networks(network n1, network n2, data test)$/;"	f
 compare_yolo_class	src/yolo_layer.c	/^int compare_yolo_class(float *output, int classes, int class_index, int stride, float objectness, int class_id, float conf_thresh)$/;"	f
 comparison_fn_t	src/detector.c	/^typedef __compar_fn_t comparison_fn_t;$/;"	t	file:
-complete_time	include/multidnn.h	/^    double complete_time;$/;"	m	struct:MULTI_DNN
+complete_time	src/multidnn.h	/^    double complete_time;$/;"	m	struct:MULTI_DNN
 composite_3d	src/image.cpp	/^void composite_3d(char *f1, char *f2, char *out, int delta)$/;"	f
 composite_image	src/image.cpp	/^void composite_image(image source, image dest, int dx, int dy)$/;"	f
 compress	src/httplib.h	/^inline bool compress(std::string &content) {$/;"	f	namespace:httplib::detail
@@ -1381,6 +1428,7 @@ custom_thread_t	src/http_stream.h	/^typedef void* custom_thread_t;$/;"	t
 cv_draw_object	src/image_opencv.cpp	/^extern "C" void cv_draw_object(image sized, float *truth_cpu, int max_boxes, int num_truth, int *it_num_set, float *lr_set, int *boxonly, int classes, char **names)$/;"	f
 cv_images	src/avees.c	/^static mat_cv** cv_images;$/;"	v	file:
 cv_images	src/demo.c	/^static mat_cv** cv_images;$/;"	v	file:
+cv_images	src/multidnn.c	/^static mat_cv** cv_images;$/;"	v	file:
 cwd	build/darknet/x64/darknet.py	/^    cwd = os.path.dirname(__file__)$/;"	v
 cwd	darknet.py	/^    cwd = os.path.dirname(__file__)$/;"	v
 cweights	include/darknet.h	/^    char  * cweights;$/;"	m	struct:layer
@@ -1403,6 +1451,7 @@ data	include/darknet.h	/^} data;$/;"	t	typeref:struct:data
 data	include/yolo_v2_class.hpp	/^    float *data;                  \/\/ pointer to the image data$/;"	m	struct:image_t
 data	src/go.c	/^    char **data;$/;"	m	struct:__anon3	file:
 data_type	include/darknet.h	/^} data_type;$/;"	t	typeref:enum:__anon27
+datacfg	src/multidnn.h	/^    char *datacfg;$/;"	m	struct:DEMO_CLASSI
 db	include/darknet.h	/^    float dt, db, dl, dr;$/;"	m	struct:dxrep
 dbox	src/box.h	/^} dbox;$/;"	t	typeref:struct:__anon2
 dc_cpu	include/darknet.h	/^    float *dc_cpu;$/;"	m	struct:layer
@@ -1456,7 +1505,6 @@ ddstTensorDesc	include/darknet.h	/^    cudnnTensorDescriptor_t dsrcTensorDesc, d
 ddstTensorDesc	include/darknet.h	/^    void* dsrcTensorDesc, *ddstTensorDesc;$/;"	m	struct:layer
 ddstTensorDesc16	include/darknet.h	/^    cudnnTensorDescriptor_t dsrcTensorDesc16, ddstTensorDesc16;$/;"	m	struct:layer
 ddstTensorDesc16	include/darknet.h	/^    void* dsrcTensorDesc16, *ddstTensorDesc16;$/;"	m	struct:layer
-deadline	include/multidnn.h	/^    float deadline;$/;"	m	struct:MULTI_DNN
 decay	include/darknet.h	/^    float decay;$/;"	m	struct:network
 decay	include/darknet.h	/^    float decay;$/;"	m	struct:update_args
 decode_box	src/box.c	/^box decode_box(box b, box anchor)$/;"	f
@@ -1497,23 +1545,34 @@ delta_yolo_class	src/yolo_layer.c	/^void delta_yolo_class(float *output, float *
 demo	src/demo.c	/^void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int cam_index, const char *filename, char **names, int classes, int avgframes,$/;"	f
 demo_alphabet	src/avees.c	/^static image **demo_alphabet;$/;"	v	file:
 demo_alphabet	src/demo.c	/^static image **demo_alphabet;$/;"	v	file:
+demo_alphabet	src/multidnn.c	/^static image **demo_alphabet;$/;"	v	file:
 demo_art	src/art.c	/^void demo_art(char *cfgfile, char *weightfile, int cam_index)$/;"	f
 demo_classes	src/avees.c	/^static int demo_classes;$/;"	v	file:
 demo_classes	src/demo.c	/^static int demo_classes;$/;"	v	file:
+demo_classes	src/multidnn.c	/^static int demo_classes;$/;"	v	file:
+demo_classification_thread	src/multidnn.c	/^void *demo_classification_thread(void *arg)$/;"	f
 demo_classifier	src/classifier.c	/^void demo_classifier(char *datacfg, char *cfgfile, char *weightfile, int cam_index, const char *filename, int benchmark, int benchmark_layers)$/;"	f
+demo_detector_thread	src/multidnn.c	/^void *demo_detector_thread(void *arg)$/;"	f
 demo_ext_output	src/avees.c	/^static int demo_ext_output = 0;$/;"	v	file:
 demo_ext_output	src/demo.c	/^static int demo_ext_output = 0;$/;"	v	file:
+demo_ext_output	src/multidnn.c	/^static int demo_ext_output = 0;$/;"	v	file:
 demo_index	src/avees.c	/^static int demo_index = 0;$/;"	v	file:
 demo_index	src/demo.c	/^static int demo_index = 0;$/;"	v	file:
+demo_index	src/multidnn.c	/^static int demo_index = 0;$/;"	v	file:
 demo_index	src/yolo_v2_class.cpp	/^    int demo_index;$/;"	m	struct:detector_gpu_t	file:
 demo_json_port	src/avees.c	/^static int demo_json_port = -1;$/;"	v	file:
 demo_json_port	src/demo.c	/^static int demo_json_port = -1;$/;"	v	file:
+demo_json_port	src/multidnn.c	/^static int demo_json_port = -1;$/;"	v	file:
 demo_names	src/avees.c	/^static char **demo_names;$/;"	v	file:
 demo_names	src/demo.c	/^static char **demo_names;$/;"	v	file:
+demo_names	src/multidnn.c	/^static char **demo_names;$/;"	v	file:
 demo_skip_frame	src/avees.c	/^static bool demo_skip_frame = false;$/;"	v	file:
 demo_skip_frame	src/demo.c	/^static bool demo_skip_frame = false;$/;"	v	file:
+demo_skip_frame	src/multidnn.c	/^static bool demo_skip_frame = false;$/;"	v	file:
+demo_thread	src/multidnn.c	/^pthread_t demo_thread[2];$/;"	v
 demo_thresh	src/avees.c	/^static float demo_thresh = 0;$/;"	v	file:
 demo_thresh	src/demo.c	/^static float demo_thresh = 0;$/;"	v	file:
+demo_thresh	src/multidnn.c	/^static float demo_thresh = 0;$/;"	v	file:
 denormalize_connected_layer	src/connected_layer.c	/^void denormalize_connected_layer(layer l)$/;"	f
 denormalize_convolutional_layer	src/convolutional_layer.c	/^void denormalize_convolutional_layer(convolutional_layer l)$/;"	f
 denormalize_net	src/darknet.c	/^void denormalize_net(char *cfgfile, char *weightfile, char *outfile)$/;"	f
@@ -1526,10 +1585,12 @@ det	src/box.h	/^	detection det;$/;"	m	struct:detection_with_class
 det_count	src/http_stream.cpp	/^    int det_count;$/;"	m	struct:detection_t	file:
 det_img	src/avees.c	/^mat_cv* det_img;$/;"	v
 det_img	src/demo.c	/^mat_cv* det_img;$/;"	v
+det_img	src/multidnn.c	/^mat_cv* det_img;$/;"	v
 det_num_pair	include/darknet.h	/^typedef struct det_num_pair {$/;"	s
 det_num_pair	include/darknet.h	/^} det_num_pair, *pdet_num_pair;$/;"	t	typeref:struct:det_num_pair
 det_s	src/avees.c	/^static image det_s;$/;"	v	file:
 det_s	src/demo.c	/^static image det_s;$/;"	v	file:
+det_s	src/multidnn.c	/^static image det_s;$/;"	v	file:
 detail	src/httplib.h	/^namespace detail {$/;"	n	namespace:httplib
 detect	include/yolo_v2_class.hpp	/^    std::vector<bbox_t> detect(cv::Mat mat, float thresh = 0.2, bool use_mean = false)$/;"	f	class:Detector
 detect	src/yolo_v2_class.cpp	/^LIB_API std::vector<bbox_t> Detector::detect(image_t img, float thresh, bool use_mean)$/;"	f	class:Detector
@@ -1558,11 +1619,13 @@ detections_comparator	src/detector.c	/^int detections_comparator(const void *pa,
 detections_queue	build/darknet/x64/darknet_video.py	/^    detections_queue = Queue(maxsize=1)$/;"	v
 detections_queue	darknet_video.py	/^    detections_queue = Queue(maxsize=1)$/;"	v
 detector	src/yolo_v2_class.cpp	/^static std::unique_ptr<Detector> detector;$/;"	v	file:
+detector_display_flag	src/multidnn.c	/^int detector_display_flag;$/;"	v
 detector_gpu_ptr	include/yolo_v2_class.hpp	/^    std::shared_ptr<void> detector_gpu_ptr;$/;"	m	class:Detector
 detector_gpu_t	src/yolo_v2_class.cpp	/^struct detector_gpu_t {$/;"	s	file:
 dets	include/darknet.h	/^    detection *dets;$/;"	m	struct:det_num_pair
 dets	src/avees.c	/^static detection *dets = NULL;$/;"	v	file:
 dets	src/demo.c	/^static detection *dets = NULL;$/;"	v	file:
+dets	src/multidnn.c	/^static detection *dets = NULL;$/;"	v	file:
 dets_for_show	include/darknet.h	/^    int dets_for_show;$/;"	m	struct:layer
 dets_for_track	include/darknet.h	/^    int dets_for_track;$/;"	m	struct:layer
 dh	src/box.h	/^    float dx, dy, dw, dh;$/;"	m	struct:__anon2
@@ -1579,6 +1642,7 @@ dispatch_request_for_content_reader	src/httplib.h	/^Server::dispatch_request_for
 display_array	src/avees.c	/^double display_array[CYCLE_IDX];$/;"	v
 display_index	src/avees.c	/^static int display_index;$/;"	v	file:
 display_sum	src/avees.c	/^double display_sum;$/;"	v
+display_thread	src/multidnn.c	/^void display_thread(void *arg)$/;"	f
 display_time	src/avees.c	/^static double display_time;$/;"	v	file:
 dispose	src/yolo_v2_class.cpp	/^int dispose() {$/;"	f
 dist	scripts/kmeansiou.c	/^double dist(double *x, double *y, int n)$/;"	f
@@ -1589,6 +1653,7 @@ dist_to_closest_center	src/matrix.c	/^float dist_to_closest_center(float *datum,
 distance_from_edge	src/data.h	/^static inline float distance_from_edge(int x, int max)$/;"	f
 distort_image	src/image.cpp	/^void distort_image(image im, float hue, float sat, float val)$/;"	f
 dl	include/darknet.h	/^    float dt, db, dl, dr;$/;"	m	struct:dxrep
+dnn_buffer	src/multidnn.c	/^volatile MultiDNN dnn_buffer[3];$/;"	v
 do_kmeans	scripts/kmeansiou.c	/^model do_kmeans(matrix data, int k)$/;"	f
 do_kmeans	src/matrix.c	/^model do_kmeans(matrix data, int k)$/;"	f
 do_nms	src/box.c	/^void do_nms(box *boxes, float **probs, int total, int classes, float thresh)$/;"	f
@@ -1604,7 +1669,11 @@ do_python_eval	scripts/reval_voc.py	/^def do_python_eval(devkit_path, year, imag
 do_python_eval	scripts/reval_voc_py3.py	/^def do_python_eval(devkit_path, year, image_set, classes, output_dir = 'results'):$/;"	f
 does_cost	include/darknet.h	/^    int does_cost;$/;"	m	struct:layer
 done	3rdparty/pthreads/include/pthread.h	/^  int          done;        \/* indicates if user function has been executed *\/$/;"	m	struct:pthread_once_t_
+dont_show	src/multidnn.h	/^    int dont_show;$/;"	m	struct:CONFIG_DETECTOR
+dont_show	src/multidnn.h	/^    int dont_show;$/;"	m	struct:DEMO_DETECTOR
 dont_update	include/darknet.h	/^    int dont_update;$/;"	m	struct:layer
+dontdraw_bbox	src/multidnn.h	/^    int dontdraw_bbox;$/;"	m	struct:CONFIG_DETECTOR
+dontdraw_bbox	src/multidnn.h	/^    int dontdraw_bbox;$/;"	m	struct:DEMO_DETECTOR
 dontload	include/darknet.h	/^    int dontload;$/;"	m	struct:layer
 dontloadscales	include/darknet.h	/^    int dontloadscales;$/;"	m	struct:layer
 dontsave	include/darknet.h	/^    int dontsave;$/;"	m	struct:layer
@@ -1724,6 +1793,8 @@ exposure	include/darknet.h	/^    float exposure;$/;"	m	struct:layer
 exposure	include/darknet.h	/^    float exposure;$/;"	m	struct:load_args
 exposure	include/darknet.h	/^    float exposure;$/;"	m	struct:network
 exposure_image	src/image.cpp	/^void exposure_image(image im, float sat)$/;"	f
+ext_output	src/multidnn.h	/^    int ext_output;$/;"	m	struct:CONFIG_DETECTOR
+ext_output	src/multidnn.h	/^    int ext_output;$/;"	m	struct:DEMO_DETECTOR
 extra	include/darknet.h	/^    int extra;$/;"	m	struct:layer
 extract_cifar	src/cifar.c	/^void extract_cifar()$/;"	f
 extract_voxel	src/voxel.c	/^void extract_voxel(char *lfile, char *rfile, char *prefix)$/;"	f
@@ -1746,6 +1817,9 @@ file_request_handler_	src/httplib.h	/^  Handler file_request_handler_;$/;"	m	cla
 filename	src/compare.c	/^    char *filename;$/;"	m	struct:__anon8	file:
 filename	src/httplib.h	/^  std::string filename;$/;"	m	struct:httplib::MultipartFile
 filename	src/httplib.h	/^  std::string filename;$/;"	m	struct:httplib::MultipartFormData
+filename	src/multidnn.h	/^    const char *filename;$/;"	m	struct:CONFIG_DETECTOR
+filename	src/multidnn.h	/^    const char *filename;$/;"	m	struct:DEMO_CLASSI
+filename	src/multidnn.h	/^    const char *filename;$/;"	m	struct:DEMO_DETECTOR
 fileno	src/darkunistd.h	32;"	d
 files	src/httplib.h	/^  MultipartFiles files;$/;"	m	struct:httplib::Request
 fill_bit_int32	src/gemm.c	/^static inline uint32_t fill_bit_int32(char src) {$/;"	f	file:
@@ -1793,6 +1867,7 @@ flag	src/getopt.c	/^  int* flag; \/* where to save its status, or NULL	*\/$/;"	m
 flag_exit	src/avees.c	/^static volatile int flag_exit;$/;"	v	file:
 flag_exit	src/data.c	/^static volatile int flag_exit;$/;"	v	file:
 flag_exit	src/demo.c	/^static volatile int flag_exit;$/;"	v	file:
+flag_exit	src/multidnn.c	/^static volatile int flag_exit;$/;"	v	file:
 flags	3rdparty/stb/include/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon47
 flatten	include/darknet.h	/^    int flatten;$/;"	m	struct:layer
 flatten	src/blas.c	/^void flatten(float *x, int size, int layers, int batch, int forward)$/;"	f
@@ -1888,6 +1963,7 @@ forward_yolo_layer	src/yolo_layer.c	/^void forward_yolo_layer(const layer l, net
 forward_yolo_layer_gpu	src/yolo_layer.c	/^void forward_yolo_layer_gpu(const layer l, network_state state)$/;"	f
 fps	src/avees.c	/^static float fps = 0;$/;"	v	file:
 fps	src/demo.c	/^static float fps = 0;$/;"	v	file:
+fps	src/multidnn.c	/^static float fps = 0;$/;"	v	file:
 fps_array	src/avees.c	/^double fps_array[CYCLE_IDX];$/;"	v
 fps_queue	build/darknet/x64/darknet_video.py	/^    fps_queue = Queue(maxsize=1)$/;"	v
 fps_queue	darknet_video.py	/^    fps_queue = Queue(maxsize=1)$/;"	v
@@ -1896,9 +1972,12 @@ frame	include/darknet.h	/^    image frame;$/;"	m	struct:frame_data
 frame_data	include/darknet.h	/^struct frame_data {$/;"	s
 frame_id	src/avees.c	/^static long long int frame_id = 0;$/;"	v	file:
 frame_id	src/demo.c	/^static long long int frame_id = 0;$/;"	v	file:
+frame_id	src/multidnn.c	/^static long long int frame_id = 0;$/;"	v	file:
 frame_queue	build/darknet/x64/darknet_video.py	/^    frame_queue = Queue()$/;"	v
 frame_queue	darknet_video.py	/^    frame_queue = Queue()$/;"	v
 frame_sequence	include/darknet.h	/^    int frame_sequence;$/;"	m	struct:frame_data
+frame_skip	src/multidnn.h	/^    int frame_skip;$/;"	m	struct:CONFIG_DETECTOR
+frame_skip	src/multidnn.h	/^    int frame_skip;$/;"	m	struct:DEMO_DETECTOR
 frame_timestamp	include/darknet.h	/^    double frame_timestamp;$/;"	m	struct:frame_data
 frames_counter	build/darknet/YoloWrapper.cs	/^            public UInt32 frames_counter;$/;"	f	struct:Darknet.YoloWrapper.bbox_t
 frames_counter	include/yolo_v2_class.hpp	/^    unsigned int frames_counter;   \/\/ counter of frames on which the object was detected$/;"	m	struct:bbox_t
@@ -2192,6 +2271,8 @@ height_in_cfg_file	scripts/gen_anchors.py	/^height_in_cfg_file = 416.$/;"	v
 hh_cpu	include/darknet.h	/^    float *hh_cpu;$/;"	m	struct:layer
 hh_gpu	include/darknet.h	/^    float *hh_gpu;$/;"	m	struct:layer
 hidden	include/darknet.h	/^    int hidden;$/;"	m	struct:layer
+hier_thresh	src/multidnn.h	/^    float hier_thresh;$/;"	m	struct:CONFIG_DETECTOR
+hier_thresh	src/multidnn.h	/^    float hier_thresh;$/;"	m	struct:DEMO_DETECTOR
 hierarchy	include/darknet.h	/^    tree *hierarchy;$/;"	m	struct:load_args
 hierarchy	include/darknet.h	/^    tree *hierarchy;$/;"	m	struct:network
 hierarchy_predictions	src/tree.c	/^void hierarchy_predictions(float *predictions, int n, tree *hier, int only_leaves)$/;"	f
@@ -2204,6 +2285,8 @@ host_components_	src/httplib.h	/^  std::vector<std::string> host_components_;$/;
 hs	3rdparty/stb/include/stb_image.h	/^   int hs,vs;   \/\/ expansion factor in each axis$/;"	m	struct:__anon38
 hsv_to_rgb	src/image.cpp	/^void hsv_to_rgb(image im)$/;"	f
 hsz	3rdparty/stb/include/stb_image.h	/^   int bpp, offset, hsz;$/;"	m	struct:__anon44
+http_post_host	src/multidnn.h	/^    char *http_post_host;$/;"	m	struct:CONFIG_DETECTOR
+http_post_host	src/multidnn.h	/^    char *http_post_host;$/;"	m	struct:DEMO_DETECTOR
 httplib	src/httplib.h	/^namespace httplib {$/;"	n
 hue	include/darknet.h	/^    float hue;$/;"	m	struct:load_args
 hue	include/darknet.h	/^    float hue;$/;"	m	struct:network
@@ -2218,6 +2301,10 @@ id	include/darknet.h	/^    int id;$/;"	m	struct:box_label
 idata	3rdparty/stb/include/stb_image.h	/^   stbi_uc *idata, *expanded, *out;$/;"	m	struct:__anon42
 idct_block_kernel	3rdparty/stb/include/stb_image.h	/^   void (*idct_block_kernel)(stbi_uc *out, int out_stride, short data[64]);$/;"	m	struct:__anon36
 idx	src/avees.c	/^static int idx;$/;"	v	file:
+idx	src/multidnn.h	/^    int idx;$/;"	m	struct:ARGS
+idx	src/multidnn.h	/^    int idx;$/;"	m	struct:CONFIG_DETECTOR
+idx	src/multidnn.h	/^    int idx;$/;"	m	struct:DEMO_CLASSI
+idx	src/multidnn.h	/^    int idx;$/;"	m	struct:DEMO_DETECTOR
 ignore_thresh	include/darknet.h	/^    float ignore_thresh;$/;"	m	struct:layer
 illoptchar	src/getopt.h	/^static const char illoptchar[] = "unknown option -- %c";$/;"	v
 illoptstring	src/getopt.h	/^static const char illoptstring[] = "unknown option -- %s";$/;"	v
@@ -2266,8 +2353,10 @@ img_x	3rdparty/stb/include/stb_image.h	/^   stbi__uint32 img_x, img_y;$/;"	m	str
 img_y	3rdparty/stb/include/stb_image.h	/^   stbi__uint32 img_x, img_y;$/;"	m	struct:__anon31
 in_img	src/avees.c	/^mat_cv* in_img;$/;"	v
 in_img	src/demo.c	/^mat_cv* in_img;$/;"	v
+in_img	src/multidnn.c	/^mat_cv* in_img;$/;"	v
 in_s	src/avees.c	/^static image in_s ;$/;"	v	file:
 in_s	src/demo.c	/^static image in_s ;$/;"	v	file:
+in_s	src/multidnn.c	/^static image in_s ;$/;"	v	file:
 increment_layer	src/conv_lstm_layer.c	/^static void increment_layer(layer *l, int steps)$/;"	f	file:
 increment_layer	src/crnn_layer.c	/^static void increment_layer(layer *l, int steps)$/;"	f	file:
 increment_layer	src/gru_layer.c	/^static void increment_layer(layer *l, int steps)$/;"	f	file:
@@ -2365,6 +2454,8 @@ jitter	include/darknet.h	/^    float jitter;$/;"	m	struct:load_args
 jobs_	src/httplib.h	/^  std::list<std::function<void()>> jobs_;$/;"	m	class:httplib::ThreadPool
 joint	include/darknet.h	/^    int joint;$/;"	m	struct:layer
 js_ptr	src/http_stream.cpp	/^static std::unique_ptr<JSON_sender> js_ptr;$/;"	v	file:
+json_port	src/multidnn.h	/^    int json_port;$/;"	m	struct:CONFIG_DETECTOR
+json_port	src/multidnn.h	/^    int json_port;$/;"	m	struct:DEMO_DETECTOR
 kalman_vec	include/yolo_v2_class.hpp	/^    std::vector<one_kalman_t> kalman_vec;$/;"	m	class:track_kalman_t
 kappa	include/darknet.h	/^    float kappa;$/;"	m	struct:layer
 keep_alive_max_count_	src/httplib.h	/^  size_t keep_alive_max_count_;$/;"	m	class:httplib::Client
@@ -2394,7 +2485,7 @@ last_prev_cell_gpu	include/darknet.h	/^    float *last_prev_cell_gpu;$/;"	m	stru
 last_prev_state_gpu	include/darknet.h	/^    float *last_prev_state_gpu;$/;"	m	struct:layer
 last_showed_frames_ago	include/yolo_v2_class.hpp	/^        unsigned int track_id, obj_id, last_showed_frames_ago;$/;"	m	struct:preview_boxes_t::preview_box_track_t
 last_time	include/yolo_v2_class.hpp	/^        std::chrono::steady_clock::time_point last_time;$/;"	m	struct:track_kalman_t::tst_t
-lastlayer	include/multidnn.h	/^    int lastlayer;$/;"	m	struct:MULTI_DNN
+lastlayer	src/multidnn.h	/^    int lastlayer;$/;"	m	struct:MULTI_DNN
 layer	include/darknet.h	/^struct layer {$/;"	s
 layer	include/darknet.h	/^typedef struct layer layer;$/;"	t	typeref:struct:layer
 layers	include/darknet.h	/^    layer *layers;$/;"	m	struct:network
@@ -2422,6 +2513,9 @@ letter_box	include/darknet.h	/^    int letter_box;$/;"	m	struct:load_args
 letter_box	include/darknet.h	/^    int letter_box;$/;"	m	struct:network
 letter_box	src/avees.c	/^static int letter_box = 0;$/;"	v	file:
 letter_box	src/demo.c	/^static int letter_box = 0;$/;"	v	file:
+letter_box	src/multidnn.c	/^static int letter_box = 0;$/;"	v	file:
+letter_box	src/multidnn.h	/^    int letter_box;$/;"	m	struct:DEMO_DETECTOR
+letter_box_in	src/multidnn.h	/^    int letter_box_in;$/;"	m	struct:CONFIG_DETECTOR
 letterbox_image	build/darknet/x64/darknet.py	/^letterbox_image = lib.letterbox_image$/;"	v
 letterbox_image	darknet.py	/^letterbox_image = lib.letterbox_image$/;"	v
 letterbox_image	src/image.cpp	/^image letterbox_image(image im, int w, int h)$/;"	f
@@ -2553,6 +2647,7 @@ main	scripts/kitti2yolo.py	/^def main(args):$/;"	f
 main	scripts/kmeansiou.c	/^int main(int argc, char *argv[])$/;"	f
 main	src/darknet.c	/^int main(int argc, char **argv)$/;"	f
 main	src/yolo_console_dll.cpp	/^int main(int argc, char *argv[])$/;"	f
+main_lock	src/multidnn.c	/^pthread_mutex_t main_lock = PTHREAD_MUTEX_INITIALIZER;$/;"	v
 make_activation_layer	src/activation_layer.c	/^layer make_activation_layer(int batch, int inputs, ACTIVATION activation)$/;"	f
 make_attention_image	src/image.cpp	/^image make_attention_image(int img_size, float *original_delta_cpu, float *original_input_cpu, int w, int h, int c, float alpha)$/;"	f
 make_avgpool_layer	src/avgpool_layer.c	/^avgpool_layer make_avgpool_layer(int batch, int w, int h, int c)$/;"	f
@@ -2690,6 +2785,8 @@ min_val_cmp	src/utils.h	113;"	d
 mini_batch	include/darknet.h	/^    int mini_batch;$/;"	m	struct:load_args
 mixup	include/darknet.h	/^    int mixup;$/;"	m	struct:load_args
 mixup	include/darknet.h	/^    int mixup;$/;"	m	struct:network
+mjpeg_port	src/multidnn.h	/^    int mjpeg_port;$/;"	m	struct:CONFIG_DETECTOR
+mjpeg_port	src/multidnn.h	/^    int mjpeg_port;$/;"	m	struct:DEMO_DETECTOR
 mode_t	3rdparty/pthreads/include/semaphore.h	/^typedef unsigned int mode_t;$/;"	t
 model	scripts/kmeansiou.c	/^} model;$/;"	t	typeref:struct:__anon53	file:
 model	src/matrix.h	/^} model;$/;"	t	typeref:struct:__anon1
@@ -2707,6 +2804,9 @@ mtx_load_data	src/data.c	/^pthread_mutex_t mtx_load_data = PTHREAD_MUTEX_INITIAL
 mtx_mjpeg	src/http_stream.cpp	/^static std::mutex mtx_mjpeg;$/;"	v	file:
 mul_cpu	src/blas.c	/^void mul_cpu(int N, float *X, int INCX, float *Y, int INCY)$/;"	f
 mult_add_into_cpu	src/blas.c	/^void mult_add_into_cpu(int N, float *X, float *Y, float *Z)$/;"	f
+multi_detect_in_thread	src/multidnn.c	/^void *multi_detect_in_thread(void *ptr)$/;"	f
+multi_fetch_in_thread	src/multidnn.c	/^void *multi_fetch_in_thread(void *ptr)$/;"	f
+multi_get_wall_time	src/multidnn.c	/^double multi_get_wall_time()$/;"	f
 mutex	src/data.c	/^pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;$/;"	v
 mutex_	src/httplib.h	/^  std::mutex mutex_;$/;"	m	class:httplib::ThreadPool
 mutex_pinned	src/dark_cuda.c	/^static pthread_mutex_t mutex_pinned = PTHREAD_MUTEX_INITIALIZER;$/;"	v	file:
@@ -2717,17 +2817,21 @@ n	include/darknet.h	/^    int n;$/;"	m	struct:tree
 n	src/go.c	/^    int n;$/;"	m	struct:__anon3	file:
 n_ind	src/go.c	11;"	d	file:
 name	include/darknet.h	/^    char **name;$/;"	m	struct:tree
-name	include/multidnn.h	/^    char* name;$/;"	m	struct:MULTI_DNN
 name	src/getopt.c	/^  const char* name; \/* option name, without leading hyphens *\/$/;"	m	struct:option	file:
 name	src/httplib.h	/^  std::string name;$/;"	m	struct:httplib::MultipartFormData
+name	src/multidnn.h	/^    char* name;$/;"	m	struct:MULTI_DNN
 names	include/darknet.h	/^    char **names;$/;"	m	struct:metadata
+names	src/multidnn.h	/^    char **names;$/;"	m	struct:CONFIG_DETECTOR
+names	src/multidnn.h	/^    char **names;$/;"	m	struct:DEMO_DETECTOR
 nbiases	include/darknet.h	/^    int nbiases;$/;"	m	struct:layer
 nboxes	src/avees.c	/^static int nboxes = 0;$/;"	v	file:
 nboxes	src/demo.c	/^static int nboxes = 0;$/;"	v	file:
+nboxes	src/multidnn.c	/^static int nboxes = 0;$/;"	v	file:
 net	include/darknet.h	/^    network net;$/;"	m	struct:network_state
 net	src/avees.c	/^static network net;$/;"	v	file:
 net	src/compare.c	/^    network net;$/;"	m	struct:__anon8	file:
 net	src/demo.c	/^static network net;$/;"	v	file:
+net	src/multidnn.c	/^static network net;$/;"	v	file:
 net	src/parser.c	/^    network net;$/;"	m	struct:size_params	file:
 net	src/yolo_v2_class.cpp	/^    network net;$/;"	m	struct:detector_gpu_t	file:
 network	include/darknet.h	/^typedef struct network network;$/;"	t	typeref:struct:network
@@ -2807,7 +2911,7 @@ num_detections	src/network.c	/^int num_detections(network *net, float thresh)$/;
 num_detections_batch	src/network.c	/^int num_detections_batch(network *net, float thresh, int batch)$/;"	f
 num_sigmas_reject_badlabels	include/darknet.h	/^    float num_sigmas_reject_badlabels;$/;"	m	struct:network
 num_steps	include/darknet.h	/^    int num_steps;$/;"	m	struct:network
-numberof	include/multidnn.h	/^    int numberof; \/\/ layer$/;"	m	struct:MULTI_DNN
+numberof	src/multidnn.h	/^    int numberof; \/\/ layer$/;"	m	struct:MULTI_DNN
 numload	include/darknet.h	/^    int numload;$/;"	m	struct:layer
 nw	include/darknet.h	/^    int nw;$/;"	m	struct:load_args
 nweights	include/darknet.h	/^    int nweights;$/;"	m	struct:layer
@@ -2829,6 +2933,7 @@ offset	3rdparty/stb/include/stb_image.h	/^   int bpp, offset, hsz;$/;"	m	struct:
 offset	src/httplib.h	/^  size_t offset = 0;$/;"	m	struct:httplib::MultipartFile
 old_id	src/http_stream.cpp	/^    int old_id, new_id;$/;"	m	struct:similarity_detections_t	file:
 old_out	3rdparty/stb/include/stb_image.h	/^   stbi_uc *out, *old_out;             \/\/ output buffer (always 4 components)$/;"	m	struct:__anon47
+on	src/multidnn.h	/^    int on;$/;"	m	struct:MULTI_DNN
 one_hot_encode	src/utils.c	/^float **one_hot_encode(float *a, int n, int k)$/;"	f
 one_kalman_t	include/yolo_v2_class.hpp	/^        one_kalman_t(int _stateSize = 6, int _measSize = 4, int _contrSize = 0) :$/;"	f	struct:track_kalman_t::one_kalman_t
 one_kalman_t	include/yolo_v2_class.hpp	/^    struct one_kalman_t$/;"	s	class:track_kalman_t
@@ -2871,6 +2976,8 @@ out	3rdparty/stb/include/stb_image.h	/^   stbi_uc *out, *old_out;             \/
 out_c	include/darknet.h	/^    int out_h, out_w, out_c;$/;"	m	struct:layer
 out_channels	include/darknet.h	/^    int out_channels;$/;"	m	struct:layer
 out_file	scripts/get_openimages_dataset.py	/^                    out_file = open("destination_path\\\\%s.txt"%bbox[0], 'w')$/;"	v
+out_filename	src/multidnn.h	/^    char *out_filename;$/;"	m	struct:CONFIG_DETECTOR
+out_filename	src/multidnn.h	/^    char *out_filename;$/;"	m	struct:DEMO_DETECTOR
 out_h	include/darknet.h	/^    int out_h, out_w, out_c;$/;"	m	struct:layer
 out_h	include/darknet.h	/^    int out_h;$/;"	m	struct:load_args
 out_w	include/darknet.h	/^    int out_h, out_w, out_c;$/;"	m	struct:layer
@@ -2977,7 +3084,9 @@ paths	include/darknet.h	/^    char **paths;$/;"	m	struct:load_args
 payload_max_length_	src/httplib.h	/^  size_t payload_max_length_;$/;"	m	class:httplib::Server
 pdet_num_pair	include/darknet.h	/^} det_num_pair, *pdet_num_pair;$/;"	t	typeref:struct:det_num_pair
 peephole	include/darknet.h	/^    int peephole;$/;"	m	struct:layer
-period	include/multidnn.h	/^    float period; $/;"	m	struct:MULTI_DNN
+period	src/multidnn.h	/^    struct timespec period;$/;"	m	struct:MULTI_DNN	typeref:struct:MULTI_DNN::timespec
+period_classification_thread	src/multidnn.c	/^void *period_classification_thread(void *arg)$/;"	f
+period_detection_thread	src/multidnn.c	/^void *period_detection_thread(void *arg)$/;"	f
 permute_args	src/getopt.c	/^permute_args(int panonopt_start, int panonopt_end, int opt_end,$/;"	f	file:
 pid_t	3rdparty/pthreads/include/sched.h	/^   typedef int pid_t;$/;"	t
 pid_t	3rdparty/pthreads/include/sched.h	/^ typedef int pid_t;$/;"	t
@@ -3019,8 +3128,9 @@ predict_image_letterbox	build/darknet/x64/darknet.py	/^predict_image_letterbox =
 predict_image_letterbox	darknet.py	/^predict_image_letterbox = lib.network_predict_image_letterbox$/;"	v
 predict_move	src/go.c	/^void predict_move(network net, float *board, float *move, int multi)$/;"	f
 predictions	src/yolo_v2_class.cpp	/^    float* predictions[NFRAMES];$/;"	m	struct:detector_gpu_t	file:
-preemptive	include/multidnn.h	/^    bool preemptive; \/\/ 1: enabled, 0: disabled$/;"	m	struct:MULTI_DNN
 prefix	3rdparty/stb/include/stb_image.h	/^   stbi__int16 prefix;$/;"	m	struct:__anon46
+prefix	src/multidnn.h	/^    char *prefix;$/;"	m	struct:CONFIG_DETECTOR
+prefix	src/multidnn.h	/^    char *prefix;$/;"	m	struct:DEMO_DETECTOR
 prepare_batch	darknet_images.py	/^def prepare_batch(images, network, channels=3):$/;"	f
 prev	3rdparty/pthreads/include/pthread.h	/^  struct ptw32_cleanup_t *prev;$/;"	m	struct:ptw32_cleanup_t	typeref:struct:ptw32_cleanup_t::ptw32_cleanup_t
 prev	src/list.h	/^    struct node *prev;$/;"	m	struct:node	typeref:struct:node::node
@@ -3055,7 +3165,7 @@ print_network	src/network.c	/^void print_network(network net)$/;"	f
 print_statistics	src/utils.c	/^void print_statistics(float *a, int n)$/;"	f
 print_symbol	src/rnn.c	/^void print_symbol(int n, char **tokens){$/;"	f
 print_yolo_detections	src/yolo.c	/^void print_yolo_detections(FILE **fps, char *id, box *boxes, float **probs, int total, int classes, int w, int h)$/;"	f
-prior	include/multidnn.h	/^    int prior;$/;"	m	struct:MULTI_DNN
+prior	src/multidnn.h	/^    int prior;$/;"	m	struct:MULTI_DNN
 prob	build/darknet/YoloWrapper.cs	/^            public float prob;           \/\/ confidence - probability that the object was found correctly$/;"	f	struct:Darknet.YoloWrapper.bbox_t
 prob	include/darknet.h	/^    float *prob;$/;"	m	struct:detection
 prob	include/yolo_v2_class.hpp	/^    float prob;                    \/\/ confidence - probability that the object was found correctly$/;"	m	struct:bbox_t
@@ -3219,9 +3329,10 @@ region_layer	src/region_layer.h	/^typedef layer region_layer;$/;"	t
 reject_similar_weights	src/network.c	/^void reject_similar_weights(network net, float sim_threshold)$/;"	f
 release	src/http_stream.cpp	/^    bool release()$/;"	f	class:JSON_sender
 release	src/http_stream.cpp	/^    bool release()$/;"	f	class:MJPG_sender
+release	src/multidnn.h	/^    int release;$/;"	m	struct:MULTI_DNN
 release_capture	src/image_opencv.cpp	/^extern "C" void release_capture(cap_cv* cap)$/;"	f
 release_mat	src/image_opencv.cpp	/^extern "C" void release_mat(mat_cv **mat)$/;"	f
-release_time	include/multidnn.h	/^    double release_time; $/;"	m	struct:MULTI_DNN
+release_time	src/multidnn.h	/^    double release_time; $/;"	m	struct:MULTI_DNN
 release_video_writer	src/image_opencv.cpp	/^extern "C" void release_video_writer(write_cv **output_video_writer)$/;"	f
 relie_activate	src/activations.h	/^static inline float relie_activate(float x){return (x>0) ? x : .01f*x;}$/;"	f
 relie_gradient	src/activations.h	/^static inline float relie_gradient(float x){return (x>0) ? 1 : .01f;}$/;"	f
@@ -3336,12 +3447,16 @@ run_coco	src/coco.c	/^void run_coco(int argc, char **argv)$/;"	f
 run_compare	src/compare.c	/^void run_compare(int argc, char **argv)$/;"	f
 run_detect_in_thread	src/avees.c	/^static volatile int run_detect_in_thread = 0;$/;"	v	file:
 run_detect_in_thread	src/demo.c	/^static volatile int run_detect_in_thread = 0;$/;"	v	file:
+run_detect_in_thread	src/multidnn.c	/^static volatile int run_detect_in_thread = 0;$/;"	v	file:
 run_detector	src/detector.c	/^void run_detector(int argc, char **argv)$/;"	f
 run_dice	src/dice.c	/^void run_dice(int argc, char **argv)$/;"	f
+run_display_in_thread	src/multidnn.c	/^static volatile int run_display_in_thread = 0;$/;"	v	file:
 run_fetch_in_thread	src/avees.c	/^static volatile int run_fetch_in_thread = 0;$/;"	v	file:
 run_fetch_in_thread	src/demo.c	/^static volatile int run_fetch_in_thread = 0;$/;"	v	file:
+run_fetch_in_thread	src/multidnn.c	/^static volatile int run_fetch_in_thread = 0;$/;"	v	file:
 run_go	src/go.c	/^void run_go(int argc, char **argv)$/;"	f
 run_load_data	src/data.c	/^static volatile int * run_load_data = NULL;$/;"	v	file:
+run_multidnn	src/multidnn.c	/^void run_multidnn(int argc, char **argv)$/;"	f
 run_nightmare	src/nightmare.c	/^void run_nightmare(int argc, char **argv)$/;"	f
 run_super	src/super.c	/^void run_super(int argc, char **argv)$/;"	f
 run_swag	src/swag.c	/^void run_swag(int argc, char **argv)$/;"	f
@@ -3498,6 +3613,7 @@ show_image_normalized	src/image.cpp	/^void show_image_normalized(image im, const
 show_images	src/image.cpp	/^void show_images(image *ims, int n, char *window)$/;"	f
 show_img	src/avees.c	/^mat_cv* show_img;$/;"	v
 show_img	src/demo.c	/^mat_cv* show_img;$/;"	v
+show_img	src/multidnn.c	/^mat_cv* show_img;$/;"	v
 show_imgs	include/darknet.h	/^    int show_imgs;$/;"	m	struct:load_args
 show_message	scripts/log_parser/log_parser.py	/^def show_message(message, stop=False):$/;"	f
 show_opencv_info	src/image_opencv.cpp	/^extern "C" void show_opencv_info()$/;"	f
@@ -4039,9 +4155,11 @@ test_yolo	src/yolo.c	/^void test_yolo(char *cfgfile, char *weightfile, char *fil
 this_thread_sleep_for	src/http_stream.cpp	/^void this_thread_sleep_for(int ms_time)$/;"	f
 this_thread_yield	src/http_stream.cpp	/^void this_thread_yield()$/;"	f
 thread_init_	src/httplib.h	/^  SSLThreadLocks thread_init_;$/;"	m	class:httplib::detail::SSLInit
+thread_sleep	src/multidnn.c	/^struct timespec thread_sleep = {THREAD_SLEEP_SEC, THREAD_SLEEP_NSEC};$/;"	v	typeref:struct:timespec
 thread_wait_ms	src/avees.c	/^static const int thread_wait_ms = 1;$/;"	v	file:
 thread_wait_ms	src/data.c	/^static const int thread_wait_ms = 5;$/;"	v	file:
 thread_wait_ms	src/demo.c	/^static const int thread_wait_ms = 1;$/;"	v	file:
+thread_wait_ms	src/multidnn.c	/^static const int thread_wait_ms = 1;$/;"	v	file:
 threads	include/darknet.h	/^    int threads;$/;"	m	struct:load_args
 threads	src/data.c	/^static pthread_t* threads = NULL;$/;"	v	file:
 threads_	src/httplib.h	/^  std::vector<std::thread> threads_;$/;"	m	class:httplib::ThreadPool
@@ -4049,9 +4167,13 @@ threat_classifier	src/classifier.c	/^void threat_classifier(char *datacfg, char 
 three_way_max	src/image.cpp	/^float three_way_max(float a, float b, float c)$/;"	f
 three_way_min	src/image.cpp	/^float three_way_min(float a, float b, float c)$/;"	f
 thresh	include/darknet.h	/^    float thresh;$/;"	m	struct:layer
+thresh	src/multidnn.h	/^    float thresh;$/;"	m	struct:CONFIG_DETECTOR
+thresh	src/multidnn.h	/^    float thresh;$/;"	m	struct:DEMO_DETECTOR
 threshold_image	src/image.cpp	/^image threshold_image(image im, float thresh)$/;"	f
 tile_images	src/image.cpp	/^image tile_images(image a, image b, int dx)$/;"	f
 time_gpu_random_matrix	src/gemm.c	/^void time_gpu_random_matrix(int TA, int TB, int m, int k, int n)$/;"	f
+time_limit_sec	src/multidnn.h	/^    int time_limit_sec;$/;"	m	struct:CONFIG_DETECTOR
+time_limit_sec	src/multidnn.h	/^    int time_limit_sec;$/;"	m	struct:DEMO_DETECTOR
 time_normalizer	include/darknet.h	/^    float time_normalizer;$/;"	m	struct:layer
 time_ongpu	src/gemm.c	/^void time_ongpu(int TA, int TB, int m, int k, int n)$/;"	f
 time_random_matrix	src/gemm.c	/^void time_random_matrix(int TA, int TB, int m, int k, int n)$/;"	f
@@ -4066,6 +4188,7 @@ timersub	src/gettimeofday.h	13;"	d
 timespec	3rdparty/pthreads/include/pthread.h	/^struct timespec {$/;"	s
 tisnan	src/region_layer.c	/^float tisnan(float x)$/;"	f
 tmp	build/darknet/x64/darknet.py	/^            tmp = os.environ["FORCE_CPU"].lower()$/;"	v
+tmp_lock	src/multidnn.c	/^pthread_mutex_t tmp_lock = PTHREAD_MUTEX_INITIALIZER;$/;"	v
 to_lower	src/httplib.h	/^inline std::string to_lower(const char *beg, const char *end) {$/;"	f	namespace:httplib::detail
 to_tblr	src/box.c	/^boxabs to_tblr(box a) {$/;"	f
 to_utf8	src/httplib.h	/^inline size_t to_utf8(int code, char *buff) {$/;"	f	namespace:httplib::detail
@@ -4174,6 +4297,7 @@ type	3rdparty/stb/include/stb_image.h	/^   stbi__uint32 type;$/;"	m	struct:__ano
 type	3rdparty/stb/include/stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon45
 type	include/darknet.h	/^    LAYER_TYPE type;$/;"	m	struct:layer
 type	include/darknet.h	/^    data_type type;$/;"	m	struct:load_args
+type	src/multidnn.h	/^    char* type;$/;"	m	struct:MULTI_DNN
 type	src/parser.c	/^    char *type;$/;"	m	struct:__anon10	file:
 uc	include/darknet.h	/^    float *uc; \/\/ Gaussian_YOLOv3 - tx,ty,tw,th uncertainty$/;"	m	struct:detection
 uc_normalizer	include/darknet.h	/^    float uc_normalizer;$/;"	m	struct:layer
@@ -4330,6 +4454,9 @@ weight_updates_gpu	include/darknet.h	/^    float * weight_updates_gpu;$/;"	m	str
 weight_updates_gpu16	include/darknet.h	/^    float * weight_updates_gpu16;$/;"	m	struct:layer
 weighted_delta_cpu	src/blas.c	/^void weighted_delta_cpu(float *a, float *b, float *s, float *da, float *db, float *ds, int n, float *dc)$/;"	f
 weighted_sum_cpu	src/blas.c	/^void weighted_sum_cpu(float *a, float *b, float *s, int n, float *c)$/;"	f
+weightfile	src/multidnn.h	/^    char *weightfile;$/;"	m	struct:CONFIG_DETECTOR
+weightfile	src/multidnn.h	/^    char *weightfile;$/;"	m	struct:DEMO_CLASSI
+weightfile	src/multidnn.h	/^    char *weightfile;$/;"	m	struct:DEMO_DETECTOR
 weights	include/darknet.h	/^    float *weights;$/;"	m	struct:layer
 weights_ema	include/darknet.h	/^    float *weights_ema;$/;"	m	struct:layer
 weights_gpu	include/darknet.h	/^    float * weights_gpu;$/;"	m	struct:layer
