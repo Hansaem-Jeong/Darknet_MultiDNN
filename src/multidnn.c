@@ -28,7 +28,7 @@
 
 
 #define QUANTUM_SEC 0
-#define QUANTUM_NSEC 1000000 // 1ms
+#define QUANTUM_NSEC 920000 // 0.9ms
 #define QUANTUM_PRIOR 5
 
 #define ALEXNET_SEC 0
@@ -60,6 +60,16 @@
 struct timespec thread_sleep = {THREAD_SLEEP_SEC, THREAD_SLEEP_NSEC};
 //thread_sleep.tv_sec = THREAD_SLEEP_SEC;
 //thread_sleep.tv_nsec = THREAD_SLEEP_NSEC;
+
+#define MEASUREMENT
+
+
+#ifdef MEASUREMENT
+
+double meas_quantum_time_array[QUANTUM_ITERATION];
+
+
+#endif
 
 volatile int detector_display_flag;
 volatile int classification_display_flag;
@@ -388,7 +398,7 @@ void *multi_display_in_thread_sync(void *ptr)
     return 0;
 }
 
-void multi_display_in_thread(void *arg)
+void *multi_display_in_thread(void *arg)
 {
     create_window_cv("MultiDNN", 0, 512, 512);
     while (!custom_atomic_load_int(&flag_exit)) {
@@ -1033,6 +1043,9 @@ void run_multidnn(int argc, char **argv)
 
     int detector_cnt = 0;
     int classifier_cnt = 0;
+
+    int meas_counter = 0;
+    int meas = 0;
     
     while(1) {
         
@@ -1040,20 +1053,21 @@ void run_multidnn(int argc, char **argv)
         if(dnn_buffer[0].on && dnn_buffer[1].on && webcam_is_ok) {
 
 //            printf("\n\n\nThesis Check Running Main Quantum Counter\n\n\n");
+            double start_quantum = multi_get_wall_time();
             nanosleep(&period, NULL);
             detector_cnt += 1;
             classifier_cnt += 1;
 
             if (detector_cnt == DETECTOR_CNT) {
-                printf("\n\n\nDetector Release\n\n\n");
+                printf("\n\n\nDetector Release, Time: %.4lf\n\n\n", multi_get_wall_time());
                 custom_atomic_store_int(&run_detect_in_thread, 1);
                 dnn_buffer[0].release = 1; // += 1?
                 detector_cnt = 0;   
             }
 
             if (classifier_cnt == CLASSIFIER_CNT) {
-                printf("\n\n\nClassifier Release\n\n\n");
-                custom_atomic_store_int(&run_detect_in_thread, 1);
+                printf("\n\n\nClassifier Release, Time: %.4lf\n\n\n", multi_get_wall_time());
+                //custom_atomic_store_int(&run_detect_in_thread, 1);
                 dnn_buffer[1].release = 1; // += 1?
                 classifier_cnt = 0;
 
@@ -1062,32 +1076,28 @@ void run_multidnn(int argc, char **argv)
             //    custom_atomic_load_int(&run_detect_in_thread);
             }
 
-        }
+//            printf("- Quantum Time : %.6lf\n", multi_get_wall_time() - start_quantum);
 
-//        nanosleep(&thread_sleep, NULL);
-//        
-//        start_flag += 1;
-//
-//        if(start_flag%15 ==0) {
-//
-//            args->idx = 0;
-//            int err = pthread_create(&set_thread[0], NULL, set_detection_thread, (void *) args);
-//        } else if (start_flag%10==0) {
-//            args->idx = 1;
-//            int err = pthread_create(&set_thread[1], NULL, set_classification_thread, (void *) args);
-//
-//        }
-       
-     // for end
+#ifdef MEASUREMENT
+            meas = meas_counter - MEAS_THRESHOLD;
+            if (meas >= 0) {
+                meas_quantum_time_array[meas_counter] = multi_get_wall_time() - start_quantum;
 
-/*
-        if(start_flag) {
-            start_flag = 0;
-            for(int i=0;i<numberof_dnn;++i) {
-                dnn_buffer[i].on = 1;
+
             }
+
+            if (meas >= QUANTUM_ITERATION) {
+
+
+                break;
+            }
+
+            meas_counter += 1;
+#endif
+            
+            
         }
-*/
+
 
     }
 }

@@ -7,6 +7,10 @@ typedef enum KindofLayer {
 
 };
 */
+
+#define QUANTUM_ITERATION 5000
+#define MEAS_THRESHOLD 50
+
 typedef struct DEMO_CLASSI {
     int idx;
     char *datacfg;
@@ -101,18 +105,15 @@ typedef struct MULTI_DNN {
     double complete_time;
 } MultiDNN;
 
-void *multi_fetch_in_thread(void *ptr);
-void *multi_fetch_in_thread_sync(void *ptr);
-void *multi_detect_in_thread(void *ptr);
-void *multi_detect_in_thread_sync(void *ptr);
-
 double multi_get_wall_time();
 
 void *demo_detector_thread(void *arg);
 
-void *period_classification_thread(void *arg);
-void *period_detection_thread(void *arg);
-
 void *demo_classification_thread(void *arg);
+
+void *multi_fetch_in_thread(void *ptr);
+void *multi_detect_in_thread(void *ptr);
+void *multi_display_in_thread_sync(void *ptr);
+void *multi_display_in_thread(void *arg);
 
 void run_multidnn(int argc, char **argv);
