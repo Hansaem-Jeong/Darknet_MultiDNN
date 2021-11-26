@@ -100,11 +100,22 @@ static volatile int run_display_in_thread = 0;
 
 double multi_get_wall_time()
 {
+ 
     struct timeval walltime;
+    
     if (gettimeofday(&walltime, NULL)) {
         return 0;
     }
-    return (double)walltime.tv_sec + (double)walltime.tv_usec * .000001;
+    int tmp_sec = (int)walltime.tv_sec % 10000;
+    int tmp_usec = (int)walltime.tv_usec;
+
+    return (double)tmp_sec + (double)tmp_usec * .000001;
+    
+/*    
+    struct timespec time_after_boot;
+    clock_gettime(CLOCK_MONOTONIC, &time_after_boot);
+    return ((double)time_after_boot.tv_sec*1000 + (double)time_after_boot.tv_nsec*0.000001);
+*/    
 }
 
 void *demo_detector_thread(void *arg);
@@ -237,9 +248,9 @@ void *demo_classification_thread(void *arg)
             old_time = time;
             time = get_time_point();
             cycle_time = (time - old_time)/1000;
-            dnn_buffer[idx].before_prediction[classifier_count] = multi_get_wall_time();
+            dnn_buffer[CLA].before_prediction[classifier_count] = multi_get_wall_time();
             float *predictions = network_predict(net_c, in_c.data);
-            dnn_buffer[idx].after_prediction[classifier_count] = multi_get_wall_time();
+            dnn_buffer[CLA].after_prediction[classifier_count] = multi_get_wall_time();
 //            printf("thesis in classifier after prediction\n");
             double frame_time_ms = (get_time_point() - time)/1000;
     // thesis
@@ -261,7 +272,7 @@ void *demo_classification_thread(void *arg)
     
             if (!benchmark) {
                 printf("---------- Classifier Result ----------\n");
-                printf("\ridx: %d, FPS: %.2f  (use -benchmark command line flag for correct measurement)\n", thesis_idx, fps);
+                printf("\ridx: %d, FPS: %.2f  (use -benchmark command line flag for correct measurement)\n", classifier_count, fps);
                 for (i = 0; i < top; ++i) {
                     int index = indexes[i];
                     printf("%.1f%%: %s\n", predictions[index] * 100, names[index]);
@@ -1025,7 +1036,7 @@ void run_multidnn(int argc, char **argv)
             }
 
             if (classifier_timer >= CLASSIFIER_PERIOD) {
-//                printf("\n\n\nClassifier Release, Time: %.4lf\n\n\n", multi_get_wall_time());
+                printf("\n\n\nClassifier Release, Time: %.4lf\n\n\n", multi_get_wall_time());
 
                 dnn_buffer[CLA].count = classifier_count;
 
