@@ -1120,6 +1120,16 @@ struct frame_data {
     double select;
 };
 
+typedef struct IMAGE_FRAME {
+    image frame;
+    image classi_frame;
+    void* img;
+    
+    int sequence;
+    double timestamp;
+
+} ImageFrame;
+
 // gemm.h
 LIB_API void init_cpu();
 

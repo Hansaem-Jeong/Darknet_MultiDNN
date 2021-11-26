@@ -655,6 +655,33 @@ extern "C" mat_cv* get_capture_frame_cv(cap_cv *cap) {
     return (mat_cv *)mat;
 }
 
+extern "C" mat_cv* get_capture_frame_cv_with_timestamp(cap_cv *cap, ImageFrame *f) {
+    cv::Mat *mat = NULL;
+    try {
+        mat = new cv::Mat();
+        if (cap) {
+            cv::VideoCapture &cpp_cap = *(cv::VideoCapture *)cap;
+            if (cpp_cap.isOpened())
+            {
+                cpp_cap >> *mat;
+
+                f->timestamp = cpp_cap.get(cv::CAP_PROP_POS_MSEC);
+//                printf(" frame_timestamp : %.2f\n", f->frame_timestamp);
+                f->sequence = cpp_cap.get(cv::CAP_PROP_POS_FRAMES);
+//                printf("hansaem image_opencv.cpp POS_FRAME : %d\n", f->frame_sequence);
+//                f->select = cpp_cap.get(cv::CAP_PROP_SELECT);
+            }
+            else std::cout << " Video-stream stopped! \n";
+        }
+        else cerr << " cv::VideoCapture isn't created \n";
+    }
+    catch (...) {
+        std::cout << " OpenCV exception: Video-stream stoped! \n";
+    }
+    return (mat_cv *)mat;
+}
+
+/*
 extern "C" mat_cv* get_capture_frame_cv_with_timestamp(cap_cv *cap, struct frame_data *f) {
     cv::Mat *mat = NULL;
     try {
@@ -680,7 +707,7 @@ extern "C" mat_cv* get_capture_frame_cv_with_timestamp(cap_cv *cap, struct frame
     }
     return (mat_cv *)mat;
 }
-
+*/
 // ----------------------------------------
 
 extern "C" int get_stream_fps_cpp_cv(cap_cv *cap)
@@ -845,6 +872,50 @@ extern "C" image get_image_from_stream_resize(cap_cv *cap, int w, int h, int c, 
     return im;
 }
 
+extern "C" image get_image_from_stream_resize_with_timestamp(cap_cv *cap, int w, int h, int c, mat_cv** in_img, int dont_close, ImageFrame *f)
+{
+    c = c ? c : 3;
+    cv::Mat *src = NULL;
+    cv::Mat *tmp = NULL;
+
+    static int once = 1;
+    if (once) {
+        once = 0;
+        do {
+            if (src) delete src;
+//            src = (cv::Mat*)get_capture_frame_cv(cap);
+            src = (cv::Mat*)get_capture_frame_cv_with_timestamp(cap, f);
+            if (!src) return make_empty_image(0, 0, 0);
+        } while (src->cols < 1 || src->rows < 1 || src->channels() < 1);
+        printf("Video stream: %d x %d \n", src->cols, src->rows);
+    }
+    else
+//        src = (cv::Mat*)get_capture_frame_cv(cap);
+        src = (cv::Mat*)get_capture_frame_cv_with_timestamp(cap, f);
+
+    if (!wait_for_stream(cap, src, dont_close)) return make_empty_image(0, 0, 0);
+    tmp = src;
+
+    image tmp_im = mat_to_image(*tmp);
+    rgbgr_image(tmp_im);
+    f->classi_frame = tmp_im;
+
+    *(cv::Mat **)in_img = src;
+    f->img = (void *)src;
+
+    cv::Mat new_img = cv::Mat(h, w, CV_8UC(c));
+    cv::resize(*src, new_img, new_img.size(), 0, 0, cv::INTER_LINEAR);
+    if (c>1) cv::cvtColor(new_img, new_img, cv::COLOR_RGB2BGR);
+    image im = mat_to_image(new_img);
+
+    f->frame = im;
+
+    //show_image_cv(im, "im");
+    //show_image_mat(*in_img, "in_img");
+    return im;
+}
+
+/*
 extern "C" image get_image_from_stream_resize_with_timestamp(cap_cv *cap, int w, int h, int c, mat_cv** in_img, int dont_close, struct frame_data *f)
 {
     c = c ? c : 3;
@@ -878,7 +949,7 @@ extern "C" image get_image_from_stream_resize_with_timestamp(cap_cv *cap, int w,
     //show_image_mat(*in_img, "in_img");
     return im;
 }
-
+*/
 // ----------------------------------------
 
 extern "C" image get_image_from_stream_letterbox(cap_cv *cap, int w, int h, int c, mat_cv** in_img, int dont_close)
