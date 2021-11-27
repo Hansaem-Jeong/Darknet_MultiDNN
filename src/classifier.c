@@ -13,6 +13,20 @@
 #include <sys/time.h>
 #endif
 
+#define MEAS_ 3000
+#define THRESH_ 50
+double time_array_[MEAS_];
+int system_count_;
+
+double original_ms_()
+{
+    
+    struct timespec after_boot;
+    clock_gettime(CLOCK_MONOTONIC, &after_boot);
+    return (after_boot.tv_sec*1000 + after_boot.tv_nsec*0.000001);
+    
+}
+
 float validate_classifier_single(char *datacfg, char *filename, char *weightfile, network *existing_net, int topk_custom);
 
 float *get_regression_values(char **labels, int n)
@@ -1291,9 +1305,14 @@ void demo_classifier(char *datacfg, char *cfgfile, char *weightfile, int cam_ind
     double cycle_time = 0;
     int thesis_idx = 0;
 
+    int all_count = 0;
+
     while(1){
         struct timeval tval_before, tval_after, tval_result;
         gettimeofday(&tval_before, NULL);
+
+        all_count += 1;
+        system_count_ = all_count - THRESH_;
 
         //image in = get_image_from_stream(cap);
         image in_s, in;
@@ -1311,8 +1330,13 @@ void demo_classifier(char *datacfg, char *cfgfile, char *weightfile, int cam_ind
         old_time = time;
         time = get_time_point();
         cycle_time = (time - old_time)/1000;
+        double start_c = original_ms_();
         float *predictions = network_predict(net, in_s.data);
+        double end_c = original_ms_();
         double frame_time_ms = (get_time_point() - time)/1000;
+        if (system_count_ >= 0) {
+            time_array_[system_count_] = end_c - start_c;
+        }
 // thesis
 //        printf("     cycle time : %lf\n", cycle_time);
 //        printf(" execution time : %lf\n", frame_time_ms);
@@ -1331,7 +1355,7 @@ void demo_classifier(char *datacfg, char *cfgfile, char *weightfile, int cam_ind
 
 
         if (!benchmark) {
-            printf("\ridx: %d, FPS: %.2f  (use -benchmark command line flag for correct measurement)\n", thesis_idx, fps);
+            printf("\ridx: %d, FPS: %.2f  (use -benchmark command line flag for correct measurement)\n", system_count_, fps);
             for (i = 0; i < top; ++i) {
                 int index = indexes[i];
                 printf("%.1f%%: %s\n", predictions[index] * 100, names[index]);
@@ -1358,6 +1382,7 @@ void demo_classifier(char *datacfg, char *cfgfile, char *weightfile, int cam_ind
         float spent_time = (get_time_point() - start_time) / 1000000;
 
 // thesis  
+/*
         if(thesis_idx>25) {
             thesis_cycletime += cycle_time;
             thesis_executiontime += frame_time_ms;
@@ -1368,13 +1393,49 @@ void demo_classifier(char *datacfg, char *cfgfile, char *weightfile, int cam_ind
             printf("    Avg Execution time: %lf\n", thesis_executiontime/1000);
             break;
         }
-
+*/
         if (spent_time >= 3.0f) {
             //printf(" spent_time = %f \n", spent_time);
             avg_fps = frame_counter / spent_time;
             frame_counter = 0;
             start_time = get_time_point();
         }
+        
+        
+        if (system_count_ >= MEAS_ - 1) {
+            int exist = 0;
+            FILE *fp;
+            char file_path_d[100] = "";
+
+            strcat(file_path_d, "measure/");
+            strcat(file_path_d, "single_detect_time.csv");
+
+            fp = fopen(file_path_d, "w+");
+
+            if (fp == NULL) {
+                int result;
+
+                result = mkdir("measure", 0766);
+
+                if(result == 0) {
+                    exist = 1;
+                    fp = fopen(file_path_d, "w+");
+                }
+            }
+
+            fprintf(fp, "%s\n", "DetectTime");
+
+            for (int i = 0; i < MEAS_; ++i) {
+                fprintf(fp, "%.1lf\n", time_array_[i]);
+            }
+
+            fclose(fp);
+
+            break;
+        }
+
+
+
     }
 #endif
 }

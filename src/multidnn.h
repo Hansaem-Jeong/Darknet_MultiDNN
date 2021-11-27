@@ -14,7 +14,7 @@ typedef enum KindofLayer {
 
 #define QUANTUM_ITERATION 50000
 
-#define MEASUREMENT_ITERATION 1550
+#define MEASUREMENT_ITERATION 150
 #define MEAS_THRESHOLD 50
 
 #define MEASUREMENT_PATH "measure"
@@ -22,7 +22,9 @@ typedef enum KindofLayer {
 #define MEASUREMENTC_FILE "/c_measure.csv"
 
 #define DETECTOR_PERIOD 150
-#define CLASSIFIER_PERIOD 100
+#define CLASSIFIER_PERIOD 150
+// priority-based, classifier HIGH set
+//#define PRIORITY_H
 
 
 #define QUANTUM_SEC 0
@@ -50,6 +52,13 @@ typedef enum KindofLayer {
 #define YOLOV3_NSEC 150000000 // 150ms
 #define YOLOV4_SEC 0
 #define YOLOV4_NSEC 150000000 // 150ms
+#define YOLOV2T_SEC 0
+#define YOLOV2T_NSEC 150000000 // 150ms
+#define YOLOV3T_SEC 0
+#define YOLOV3T_NSEC 150000000 // 150ms
+#define YOLOV4T_SEC 0
+#define YOLOV4T_NSEC 150000000 // 150ms
+
 #define YOLO_PRIOR 10
 #define DETECTOR_CNT 150
 
@@ -131,6 +140,7 @@ typedef struct MULTI_DNN {
 
     ImageFrame detect_section;
     ImageFrame display_section; 
+    float *prediction;
 
     int count;
 

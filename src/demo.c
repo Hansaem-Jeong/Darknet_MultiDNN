@@ -55,6 +55,19 @@ static const int thread_wait_ms = 1;
 static volatile int run_fetch_in_thread = 0;
 static volatile int run_detect_in_thread = 0;
 
+#define MEAS 3000
+#define THRESH 50
+double time_array[MEAS];
+int system_count;
+
+
+double original_ms() 
+{
+    struct timespec time_after_boot;
+    clock_gettime(CLOCK_MONOTONIC, &time_after_boot);
+    return (time_after_boot.tv_sec*1000+time_after_boot.tv_nsec*0.000001);
+}
+
 
 void *fetch_in_thread(void *ptr)
 {
@@ -102,7 +115,14 @@ void *detect_in_thread(void *ptr)
         layer l = net.layers[net.n - 1];
         float *X = det_s.data;
         //float *prediction = 
+        double start_d = original_ms();
         network_predict(net, X);
+        double end_d = original_ms();
+
+        if(system_count >= 0) {
+            time_array[system_count] = end_d - start_d;
+
+        }
 
         cv_images[demo_index] = det_img;
         det_img = cv_images[(demo_index + avg_frames / 2 + 1) % avg_frames];
@@ -235,7 +255,8 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
     int count = 0;
     if(!prefix && !dont_show){
         int full_screen = 0;
-        create_window_cv("Demo", full_screen, 1352, 1013);
+//        create_window_cv("Demo", full_screen, 1352, 1013);
+        create_window_cv("Demo", full_screen, 512, 512);
     }
 
 
@@ -266,9 +287,12 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 
 // thesis
 //    printf("THESIS hansaem demo.c net size : %ld\n", sizeof(net));
+    int all_count = 0;
 
     while(1){
         ++count;
+        all_count += 1;
+        system_count = all_count - THRESH;
         {
             const float nms = .45;    // 0.4F
             int local_nboxes = nboxes;
@@ -289,7 +313,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
             //printf("\033[2J");
             //printf("\033[1;1H");
             //printf("\nFPS:%.1f\n", fps);
-            printf("Objects:\n\n");
+            printf("%d-th Objects:\n\n", system_count);
 
             ++frame_id;
             if (demo_json_port > 0) {
@@ -396,6 +420,42 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
                 start_time = get_time_point();
             }
         }
+
+
+        if (system_count >= MEAS - 1) {
+            int exist = 0;
+            FILE *fp;
+            char file_path_d[100] = "";
+
+            strcat(file_path_d, "measure/");
+            strcat(file_path_d, "single_detect_time.csv");
+
+            fp = fopen(file_path_d, "w+");
+
+            if (fp == NULL) {
+                int result;
+
+                result = mkdir("measure", 0766);
+
+                if(result == 0) {
+                    exist = 1;
+                    fp = fopen(file_path_d, "w+");
+                }
+            }
+
+            fprintf(fp, "%s\n", "DetectTime");
+
+            for (int i = 0; i < MEAS; ++i) {
+                fprintf(fp, "%.1lf\n", time_array[i]);
+            }
+
+            fclose(fp);
+
+            break;
+            custom_atomic_store_int(&flag_exit, 1);
+        }
+
+
     }
     printf("input video stream closed. \n");
     if (output_video_writer) {

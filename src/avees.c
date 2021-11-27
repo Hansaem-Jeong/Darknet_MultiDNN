@@ -109,7 +109,7 @@ double get_time_in_ms()
 {
     struct timespec time_after_boot;
     clock_gettime(CLOCK_MONOTONIC, &time_after_boot);
-    return (time_after_boot.tv_sec*1000+time_after_boot.tv_nsec*0.000001);
+    return ((double)time_after_boot.tv_sec*1000+(double)time_after_boot.tv_nsec*0.000001);
 }
 
 double avees_get_wall_time()
@@ -138,8 +138,8 @@ void *avees_fetch_in_thread(void *ptr)
         if (letter_box)
             in_s = get_image_from_stream_letterbox(cap, net.w, net.h, net.c, &in_img, dont_close_stream);
         else {
-//            in_s = get_image_from_stream_resize(cap, net.w, net.h, net.c, &in_img, dont_close_stream);
-            in_s = get_image_from_stream_resize_with_timestamp(cap, net.w, net.h, net.c, &in_img, dont_close_stream, &avees_frame[buff_index]);
+            in_s = get_image_from_stream_resize(cap, net.w, net.h, net.c, &in_img, dont_close_stream);
+//            in_s = get_image_from_stream_resize_with_timestamp(cap, net.w, net.h, net.c, &in_img, dont_close_stream, &avees_frame[buff_index);
         }
         if (!in_s.data) {
             printf("Stream closed.\n");
