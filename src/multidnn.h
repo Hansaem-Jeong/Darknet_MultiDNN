@@ -134,6 +134,7 @@ typedef struct MULTI_DNN {
 
     int count;
 
+    double frame_timestamp[MEASUREMENT_ITERATION];
     double release_period[MEASUREMENT_ITERATION];
     double release_time[MEASUREMENT_ITERATION]; 
     double onrunning_time[MEASUREMENT_ITERATION];
@@ -141,6 +142,9 @@ typedef struct MULTI_DNN {
 
     double before_prediction[MEASUREMENT_ITERATION];
     double after_prediction[MEASUREMENT_ITERATION];
+
+    double display_start[MEASUREMENT_ITERATION];
+    double display_end[MEASUREMENT_ITERATION];
 
 } MultiDNN;
 
