@@ -1014,6 +1014,13 @@ typedef struct box_label {
 //} list;
 // -----------------------------------------------------
 
+typedef struct DNN_INFO {
+    char* name;
+    char* type;
+
+    int prior;
+} DNN_Info;
+
 
 // parser.c
 LIB_API network *load_network(char *cfg, char *weights, int clear);
@@ -1031,6 +1038,7 @@ LIB_API void diounms_sort(detection *dets, int total, int classes, float thresh,
 
 // network.h
 LIB_API float *network_predict(network net, float *input);
+LIB_API float *multi_network_predict(network net, float *input, DNN_Info dnn_info);
 LIB_API float *network_predict_ptr(network *net, float *input);
 LIB_API detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num, int letter);
 LIB_API det_num_pair* network_predict_batch(network *net, image im, int batch_size, int w, int h, float thresh, float hier, int *map, int relative, int letter);
@@ -1119,6 +1127,7 @@ struct frame_data {
     int frame_sequence;
     double select;
 };
+
 
 typedef struct IMAGE_FRAME {
     image frame;

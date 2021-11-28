@@ -118,17 +118,21 @@ typedef struct IMAGE_FRAME {
 
 } ImageFrame;
 */ // in include/darknet.h
+
+
 typedef struct MULTI_DNN {
 
     volatile int on;
     volatile int release;
 
-    char* name;
-    char* type;
+    DNN_Info info;
+
+    //char* name;
+    //char* type;
     int numberof; // layer
 //    enum KindofLayer kind; 
 
-    int prior;
+    //int prior;
 //    bool preemptive; // 1: enabled, 0: disabled
 //    float period_msec; 
     struct timespec period;

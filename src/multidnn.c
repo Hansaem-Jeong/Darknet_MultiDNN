@@ -389,10 +389,10 @@ void *multi_classification_in_thread(void *ptr)
 */
         int tmp_count = cla_count;
 
-        usleep(2000);
         dnn_buffer[CLA].before_prediction[tmp_count] = multi_get_wall_time();
 
-        float *predictions = network_predict(net_c, in_c.data);
+        //float *predictions = network_predict(net_c, in_c.data);
+        float *predictions = multi_network_predict(net_c, in_c.data, dnn_buffer[CLA].info);
 
         dnn_buffer[CLA].after_prediction[tmp_count] = multi_get_wall_time();
 
@@ -479,7 +479,8 @@ void *multi_detect_in_thread(void *ptr)
         dnn_buffer[DET].before_prediction[tmp_count] = multi_get_wall_time();
 //        dnn_buffer[DET].before_prediction[tmp_count] = get_time_in_ms();
 
-        network_predict(net, X);
+        //network_predict(net, X);
+        multi_network_predict(net, X, dnn_buffer[DET].info);
 
         dnn_buffer[DET].after_prediction[tmp_count] = multi_get_wall_time();
 //        dnn_buffer[DET].after_prediction[tmp_count] = get_time_in_ms();
@@ -922,13 +923,13 @@ void run_multidnn(int argc, char **argv)
         
             dnn_buffer[idx].on = 0;
             dnn_buffer[idx].period = period;
-            dnn_buffer[idx].name = name;
-            dnn_buffer[idx].prior = prior;
+            dnn_buffer[idx].info.name = name;
+            dnn_buffer[idx].info.prior = prior;
         
             printf("- This part create DNN: \n");
-            printf("       Name: %s\n", dnn_buffer[idx].name);
+            printf("       Name: %s\n", dnn_buffer[idx].info.name);
             printf("     Period: %ld ms\n", dnn_buffer[idx].period.tv_nsec/1000000);
-            printf("   Priority: %d\n", dnn_buffer[idx].prior);
+            printf("   Priority: %d\n", dnn_buffer[idx].info.prior);
             
             int dont_show = find_arg(argc, argv, "-dont_show");
             int benchmark = find_arg(argc, argv, "-benchmark");
@@ -1034,13 +1035,13 @@ void run_multidnn(int argc, char **argv)
         
             dnn_buffer[idx].on = 0;
             dnn_buffer[idx].period = period;
-            dnn_buffer[idx].name = name;
-            dnn_buffer[idx].prior = prior;
+            dnn_buffer[idx].info.name = name;
+            dnn_buffer[idx].info.prior = prior;
         
             printf("- This part create DNN: \n");
-            printf("       Name: %s\n", dnn_buffer[idx].name);
+            printf("       Name: %s\n", dnn_buffer[idx].info.name);
             printf("     Period: %ld ms\n", dnn_buffer[idx].period.tv_nsec/1000000);
-            printf("   Priority: %d\n", dnn_buffer[idx].prior);
+            printf("   Priority: %d\n", dnn_buffer[idx].info.prior);
             
         
         

@@ -39,6 +39,8 @@
 #include "upsample_layer.h"
 #include "parser.h"
 
+#include "multidnn.h"
+
 load_args get_base_args(network *net)
 {
     load_args args = { 0 };
@@ -762,6 +764,25 @@ float *network_predict(network net, float *input)
 {
 #ifdef GPU
     if(gpu_index >= 0)  return network_predict_gpu(net, input);
+#endif
+
+    network_state state = {0};
+    state.net = net;
+    state.index = 0;
+    state.input = input;
+    state.truth = 0;
+    state.train = 0;
+    state.delta = 0;
+    forward_network(net, state);
+    float *out = get_network_output(net);
+    return out;
+}
+
+float *multi_network_predict(network net, float *input, DNN_Info dnn_info)
+{
+#ifdef GPU
+    printf("***** Thesis in \"network_predict\": %s\n", dnn_info.name);
+    if(gpu_index >= 0)  return multi_network_predict_gpu(net, input, dnn_info);
 #endif
 
     network_state state = {0};
