@@ -70,6 +70,7 @@ extern "C" {
     int *cuda_make_int_array(size_t n);
 	int *cuda_make_int_array_new_api(int *x, size_t n);
     void cuda_push_array(float *x_gpu, float *x, size_t n);
+    void multi_cuda_push_array(float *x_gpu, float *x, size_t n, DNN_Info dnn_info);
     //LIB_API void cuda_pull_array(float *x_gpu, float *x, size_t n);
     //LIB_API void cuda_set_device(int n);
     int cuda_get_device();
@@ -79,6 +80,7 @@ extern "C" {
     float cuda_compare(float *x_gpu, float *x, size_t n, char *s);
     dim3 cuda_gridsize(size_t n);
     cudaStream_t get_cuda_stream();
+    cudaStream_t multi_get_cuda_stream(DNN_Info dnn_info);
     //cudaStream_t get_cuda_memcpy_stream();
     int get_number_of_blocks(int array_size, int block_size);
     int get_gpu_compute_capability(int i, char *device_name);

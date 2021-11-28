@@ -14,7 +14,7 @@ typedef enum KindofLayer {
 
 #define QUANTUM_ITERATION 50000
 
-#define MEASUREMENT_ITERATION 150
+#define MEASUREMENT_ITERATION 1050
 #define MEAS_THRESHOLD 50
 
 #define MEASUREMENT_PATH "measure"

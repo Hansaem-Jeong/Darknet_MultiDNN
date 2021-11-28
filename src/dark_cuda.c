@@ -119,6 +119,29 @@ dim3 cuda_gridsize(size_t n){
 static cudaStream_t streamsArray[16];    // cudaStreamSynchronize( get_cuda_stream() );
 static int streamInit[16] = { 0 };
 
+cudaStream_t multi_get_cuda_stream(DNN_Info dnn_info) {
+//    int i = cuda_get_device();
+    int i = dnn_info.stream_number;
+    printf("********** Thesis %s in \"get_cuda_stream\", cuda_get_device(): %d\n", dnn_info.name, i);
+    if (!streamInit[i]) {
+        printf("Create CUDA-stream - %d \n", i);
+#ifdef CUDNN
+        cudaError_t status = cudaStreamCreateWithFlags(&streamsArray[i], cudaStreamNonBlocking);
+#else
+        cudaError_t status = cudaStreamCreate(&streamsArray[i]);
+#endif
+        if (status != cudaSuccess) {
+            printf(" cudaStreamCreate error: %d \n", status);
+            const char *s = cudaGetErrorString(status);
+            printf("CUDA Error: %s\n", s);
+            status = cudaStreamCreateWithFlags(&streamsArray[i], cudaStreamNonBlocking);    // cudaStreamDefault
+            CHECK_CUDA(status);
+        }
+        streamInit[i] = 1;
+    }
+    return streamsArray[i];
+}
+
 cudaStream_t get_cuda_stream() {
     int i = cuda_get_device();
     if (!streamInit[i]) {
@@ -578,6 +601,14 @@ void cuda_free_host(float *x_cpu)
 {
     //cudaStreamSynchronize(get_cuda_stream());
     cudaError_t status = cudaFreeHost(x_cpu);
+    CHECK_CUDA(status);
+}
+
+void multi_cuda_push_array(float *x_gpu, float *x, size_t n, DNN_Info dnn_info)
+{
+    size_t size = sizeof(float)*n;
+    //cudaError_t status = cudaMemcpy(x_gpu, x, size, cudaMemcpyHostToDevice);
+    cudaError_t status = cudaMemcpyAsync(x_gpu, x, size, cudaMemcpyHostToDevice, multi_get_cuda_stream(dnn_info));
     CHECK_CUDA(status);
 }
 

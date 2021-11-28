@@ -26,6 +26,9 @@
 #include "darknet.h"
 #include "http_stream.h"
 
+#include "nvToolsExt.h"
+nvtxRangeId_t nvtx_name_CLA;
+nvtxRangeId_t nvtx_name_DET;
 
 struct timespec thread_sleep = {THREAD_SLEEP_SEC, THREAD_SLEEP_NSEC};
 //thread_sleep.tv_sec = THREAD_SLEEP_SEC;
@@ -121,37 +124,6 @@ double multi_get_wall_time()
     clock_gettime(CLOCK_MONOTONIC, &after_boot);
     return (after_boot.tv_sec*1000 + after_boot.tv_nsec*0.000001);
     
-}
-
-double wall_time_1()
-{
-    struct timespec time_after_boot;
-    clock_gettime(CLOCK_MONOTONIC, &time_after_boot);
-    return ((double)time_after_boot.tv_sec*1000 + (double)time_after_boot.tv_nsec*0.000001);
-}
-double wall_time_2()
-{
-    struct timespec time_after_boot;
-    clock_gettime(CLOCK_MONOTONIC, &time_after_boot);
-    return ((double)time_after_boot.tv_sec*1000 + (double)time_after_boot.tv_nsec*0.000001);
-}
-double wall_time_3()
-{
-    struct timespec time_after_boot;
-    clock_gettime(CLOCK_MONOTONIC, &time_after_boot);
-    return ((double)time_after_boot.tv_sec*1000 + (double)time_after_boot.tv_nsec*0.000001);
-}
-double wall_time_4()
-{
-    struct timespec time_after_boot;
-    clock_gettime(CLOCK_MONOTONIC, &time_after_boot);
-    return ((double)time_after_boot.tv_sec*1000 + (double)time_after_boot.tv_nsec*0.000001);
-}
-double wall_time_5()
-{
-    struct timespec time_after_boot;
-    clock_gettime(CLOCK_MONOTONIC, &time_after_boot);
-    return ((double)time_after_boot.tv_sec*1000 + (double)time_after_boot.tv_nsec*0.000001);
 }
 
 
@@ -392,7 +364,9 @@ void *multi_classification_in_thread(void *ptr)
         dnn_buffer[CLA].before_prediction[tmp_count] = multi_get_wall_time();
 
         //float *predictions = network_predict(net_c, in_c.data);
+        nvtx_name_CLA = nvtxRangeStartA("MultiDNN - Classifier");
         float *predictions = multi_network_predict(net_c, in_c.data, dnn_buffer[CLA].info);
+        nvtxRangeEnd(nvtx_name_CLA);
 
         dnn_buffer[CLA].after_prediction[tmp_count] = multi_get_wall_time();
 
@@ -480,7 +454,9 @@ void *multi_detect_in_thread(void *ptr)
 //        dnn_buffer[DET].before_prediction[tmp_count] = get_time_in_ms();
 
         //network_predict(net, X);
+        nvtx_name_DET = nvtxRangeStartA("MultiDNN - Detector");
         multi_network_predict(net, X, dnn_buffer[DET].info);
+        nvtxRangeEnd(nvtx_name_DET);
 
         dnn_buffer[DET].after_prediction[tmp_count] = multi_get_wall_time();
 //        dnn_buffer[DET].after_prediction[tmp_count] = get_time_in_ms();
@@ -925,6 +901,7 @@ void run_multidnn(int argc, char **argv)
             dnn_buffer[idx].period = period;
             dnn_buffer[idx].info.name = name;
             dnn_buffer[idx].info.prior = prior;
+            dnn_buffer[idx].info.stream_number = idx+1;
         
             printf("- This part create DNN: \n");
             printf("       Name: %s\n", dnn_buffer[idx].info.name);
@@ -1037,6 +1014,7 @@ void run_multidnn(int argc, char **argv)
             dnn_buffer[idx].period = period;
             dnn_buffer[idx].info.name = name;
             dnn_buffer[idx].info.prior = prior;
+            dnn_buffer[idx].info.stream_number = idx+1;
         
             printf("- This part create DNN: \n");
             printf("       Name: %s\n", dnn_buffer[idx].info.name);

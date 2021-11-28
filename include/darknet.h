@@ -1018,6 +1018,8 @@ typedef struct DNN_INFO {
     char* name;
     char* type;
 
+    int stream_number;
+
     int prior;
 } DNN_Info;
 

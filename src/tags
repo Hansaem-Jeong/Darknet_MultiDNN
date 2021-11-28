@@ -29,7 +29,7 @@ BboxContainer	csharp/YoloCSharpWrapper.cs	/^        public struct BboxContainer$
 BufferStream	httplib.h	/^class BufferStream : public Stream {$/;"	c	namespace:httplib
 CHECK_CUBLAS	dark_cuda.h	61;"	d
 CHECK_CUDA	dark_cuda.h	60;"	d
-CHECK_CUDNN	dark_cuda.h	96;"	d
+CHECK_CUDNN	dark_cuda.h	97;"	d
 CLA	multidnn.h	66;"	d
 CLASSIFIER_CNT	multidnn.h	46;"	d
 CLASSIFIER_H	classifier.h	2;"	d
@@ -674,7 +674,7 @@ ctx_mutex_	httplib.h	/^  std::mutex ctx_mutex_;$/;"	m	class:httplib::SSLClient
 ctx_mutex_	httplib.h	/^  std::mutex ctx_mutex_;$/;"	m	class:httplib::SSLServer
 cublas_check_error	dark_cuda.c	/^void cublas_check_error(cublasStatus_t status)$/;"	f
 cublas_check_error_extended	dark_cuda.c	/^void cublas_check_error_extended(cublasStatus_t status, const char *file, int line, const char *date_time)$/;"	f
-cudaEventWaitDefault	dark_cuda.c	335;"	d	file:
+cudaEventWaitDefault	dark_cuda.c	357;"	d	file:
 cuda_compare	dark_cuda.c	/^float cuda_compare(float *x_gpu, float *x, size_t n, char *s)$/;"	f
 cuda_debug_sync	dark_cuda.c	/^int cuda_debug_sync = 0;$/;"	v
 cuda_free	dark_cuda.c	/^void cuda_free(float *x_gpu)$/;"	f
@@ -1540,6 +1540,7 @@ multi_detect_in_thread	multidnn.c	/^void *multi_detect_in_thread(void *ptr)$/;"	
 multi_display_in_thread	multidnn.c	/^void *multi_display_in_thread(void *arg)$/;"	f
 multi_display_in_thread_sync	multidnn.c	/^void *multi_display_in_thread_sync(void *ptr)$/;"	f
 multi_fetch_in_thread	multidnn.c	/^void *multi_fetch_in_thread(void *ptr)$/;"	f
+multi_get_cuda_stream	dark_cuda.c	/^cudaStream_t multi_get_cuda_stream(DNN_Info dnn_info) {$/;"	f
 multi_get_wall_time	multidnn.c	/^double multi_get_wall_time()$/;"	f
 multi_network_predict	network.c	/^float *multi_network_predict(network net, float *input, DNN_Info dnn_info)$/;"	f
 mutex	data.c	/^pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;$/;"	v
@@ -1596,6 +1597,8 @@ normalize_net	darknet.c	/^void normalize_net(char *cfgfile, char *weightfile, ch
 num_detections	network.c	/^int num_detections(network *net, float thresh)$/;"	f
 num_detections_batch	network.c	/^int num_detections_batch(network *net, float thresh, int batch)$/;"	f
 numberof	multidnn.h	/^    int numberof; \/\/ layer$/;"	m	struct:MULTI_DNN
+nvtx_name_CLA	multidnn.c	/^nvtxRangeId_t nvtx_name_CLA;$/;"	v
+nvtx_name_DET	multidnn.c	/^nvtxRangeId_t nvtx_name_DET;$/;"	v
 obj_id	csharp/YoloCSharpWrapper.cs	/^            public UInt32 obj_id;        \/\/ class of object - from range [0, classes-1]$/;"	f	struct:Darknet.YoloWrapper.bbox_t
 objects_names_from_file	yolo_console_dll.cpp	/^std::vector<std::string> objects_names_from_file(std::string const filename) {$/;"	f
 offset	httplib.h	/^  size_t offset = 0;$/;"	m	struct:httplib::MultipartFile
@@ -2341,11 +2344,6 @@ wait_stream	dark_cuda.c	/^void wait_stream(int i) {$/;"	f
 wait_until_press_key_cv	image_opencv.cpp	/^extern "C" int wait_until_press_key_cv() { return 0; }$/;"	f
 wait_until_press_key_cv	image_opencv.cpp	/^extern "C" int wait_until_press_key_cv()$/;"	f
 wait_until_socket_is_ready	httplib.h	/^inline bool wait_until_socket_is_ready(socket_t sock, time_t sec, time_t usec) {$/;"	f	namespace:httplib::detail
-wall_time_1	multidnn.c	/^double wall_time_1()$/;"	f
-wall_time_2	multidnn.c	/^double wall_time_2()$/;"	f
-wall_time_3	multidnn.c	/^double wall_time_3()$/;"	f
-wall_time_4	multidnn.c	/^double wall_time_4()$/;"	f
-wall_time_5	multidnn.c	/^double wall_time_5()$/;"	f
 warnx	getopt.c	/^warnx(const char* fmt, ...)$/;"	f	file:
 webcam_is_ok	multidnn.c	/^volatile int webcam_is_ok;$/;"	v
 weighted_delta_cpu	blas.c	/^void weighted_delta_cpu(float *a, float *b, float *s, float *da, float *db, float *ds, int n, float *dc)$/;"	f

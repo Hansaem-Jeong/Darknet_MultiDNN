@@ -59,6 +59,108 @@ int time_comparator(const void *pa, const void *pb)
     return 0;
 }
 
+void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_info)
+{
+    static time_benchmark_layers *avg_time_per_layer = NULL;
+    static time_benchmark_layers *sorted_avg_time_per_layer = NULL;
+    double start_time, end_time;
+    printf("********* Thesis %s in \"forward_network_gpu\"\n", dnn_info.name);
+    if (net.benchmark_layers) {
+        printf("********* Thesis %s IF1 in \"forward_network_gpu\"\n", dnn_info.name);
+        if (!avg_time_per_layer) {
+            avg_time_per_layer = (time_benchmark_layers *)calloc(net.n, sizeof(time_benchmark_layers));
+            sorted_avg_time_per_layer = (time_benchmark_layers *)calloc(net.n, sizeof(time_benchmark_layers));
+        }
+        cudaDeviceSynchronize();
+    }
+
+    //printf("\n");
+    state.workspace = net.workspace;
+    int i;
+    for(i = 0; i < net.n; ++i){
+        state.index = i;
+        layer l = net.layers[i];
+        if(l.delta_gpu && state.train){
+            printf("********* Thesis %s IF2 in \"forward_network_gpu\"\n", dnn_info.name);
+            fill_ongpu(l.outputs * l.batch, 0, l.delta_gpu, 1);
+        }
+
+        if (net.benchmark_layers) {
+            printf("********* Thesis %s IF3 in \"forward_network_gpu\"\n", dnn_info.name);
+            start_time = get_time_point();
+        }
+
+        l.forward_gpu(l, state);
+
+        if (net.benchmark_layers) {
+            printf("********* Thesis %s IF4 in \"forward_network_gpu\"\n", dnn_info.name);
+            CHECK_CUDA(cudaDeviceSynchronize());
+            end_time = get_time_point();
+            const double took_time = (end_time - start_time) / 1000;
+            const double alpha = 0.9;
+            if (avg_time_per_layer[i].time == 0) {
+                printf("********* Thesis %s IF5 in \"forward_network_gpu\"\n", dnn_info.name);
+                avg_time_per_layer[i].layer_id = i;
+                avg_time_per_layer[i].layer_type = l.type;
+                avg_time_per_layer[i].time = took_time;
+            }
+            else avg_time_per_layer[i].time = avg_time_per_layer[i].time * alpha + took_time * (1 - alpha);
+
+            sorted_avg_time_per_layer[i] = avg_time_per_layer[i];
+            printf("\n fw-layer %d - type: %d - %lf ms - avg_time %lf ms \n", i, l.type, took_time, avg_time_per_layer[i].time);
+        }
+
+        if(net.wait_stream) {
+            printf("********* Thesis %s IF6 in \"forward_network_gpu\"\n", dnn_info.name);
+//            cudaStreamSynchronize(get_cuda_stream());
+            cudaStreamSynchronize(multi_get_cuda_stream(dnn_info));
+
+        }
+        state.input = l.output_gpu;
+        //cudaDeviceSynchronize();
+
+        /*
+        cuda_pull_array(l.output_gpu, l.output, l.outputs);
+        cudaStreamSynchronize(get_cuda_stream());
+        float avg_val = 0;
+        int k;
+        for (k = 0; k < l.outputs; ++k) avg_val += l.output[k];
+        printf(" i: %d - avg_val = %f \n", i, avg_val / l.outputs);
+        */
+
+/*
+        cuda_pull_array(l.output_gpu, l.output, l.batch*l.outputs);
+        if (l.out_w >= 0 && l.out_h >= 1 && l.c >= 3) {
+            int j;
+            for (j = 0; j < l.out_c; ++j) {
+                image img = make_image(l.out_w, l.out_h, 3);
+                memcpy(img.data, l.output + l.out_w*l.out_h*j, l.out_w*l.out_h * 1 * sizeof(float));
+                memcpy(img.data + l.out_w*l.out_h * 1, l.output + l.out_w*l.out_h*j, l.out_w*l.out_h * 1 * sizeof(float));
+                memcpy(img.data + l.out_w*l.out_h * 2, l.output + l.out_w*l.out_h*j, l.out_w*l.out_h * 1 * sizeof(float));
+                char buff[256];
+                sprintf(buff, "layer-%d slice-%d", i, j);
+                show_image(img, buff);
+                save_image(img, buff);
+            }
+            cvWaitKey(0); // wait press-key in console
+            cvDestroyAllWindows();
+        }
+*/
+    }
+
+    if (net.benchmark_layers) {
+        printf("\n\nSorted by time (forward):\n");
+        qsort(sorted_avg_time_per_layer, net.n, sizeof(time_benchmark_layers), time_comparator);
+        for (i = 0; i < net.n; ++i) {
+            //printf("layer %d - type: %d - avg_time %lf ms \n", avg_time_per_layer[i].layer_id, avg_time_per_layer[i].layer_type, avg_time_per_layer[i].time);
+            printf("%d - fw-sort-layer %d - type: %d - avg_time %lf ms \n", i, sorted_avg_time_per_layer[i].layer_id, sorted_avg_time_per_layer[i].layer_type, sorted_avg_time_per_layer[i].time);
+        }
+    }
+
+    //cudaStreamSynchronize(get_cuda_stream());   // sync CUDA-functions
+    //cudaDeviceSynchronize();
+}
+
 void forward_network_gpu(network net, network_state state)
 {
     static time_benchmark_layers *avg_time_per_layer = NULL;
@@ -752,9 +854,12 @@ float *network_predict_gpu(network net, float *input)
 
 float *multi_network_predict_gpu(network net, float *input, DNN_Info dnn_info)
 {
-    printf("**** Thesis in \"multi_network_predict_gpu\": %s\n", dnn_info.name);
-    if (net.gpu_index != cuda_get_device())
+    printf("**** Thesis %s in \"multi_network_predict_gpu\"\n", dnn_info.name);
+    if (net.gpu_index != cuda_get_device()) {
+
+        printf("**** Thesis %s IF1 in \"multi_network_predict_gpu\"\n", dnn_info.name);
         cuda_set_device(net.gpu_index);
+    }
     int size = get_network_input_size(net) * net.batch;
     network_state state;
     state.index = 0;
@@ -770,8 +875,10 @@ float *multi_network_predict_gpu(network net, float *input, DNN_Info dnn_info)
     static cudaGraphExec_t instance;
 
     if ((*net.cuda_graph_ready) == 0) {
+        printf("**** Thesis %s IF2 in \"multi_network_predict_gpu\"\n", dnn_info.name);
         static cudaGraph_t graph;
         if (net.use_cuda_graph == 1) {
+            printf("**** Thesis %s IF3 in \"multi_network_predict_gpu\"\n", dnn_info.name);
             int i;
             for (i = 0; i < 16; ++i) switch_stream(i);
 
@@ -782,10 +889,14 @@ float *multi_network_predict_gpu(network net, float *input, DNN_Info dnn_info)
             CHECK_CUDA(cudaStreamBeginCapture(stream0, cudaStreamCaptureModeGlobal));
         }
 
-        cuda_push_array(state.input, net.input_pinned_cpu, size);
-        forward_network_gpu(net, state);
+//        cuda_push_array(state.input, net.input_pinned_cpu, size);
+        /* *** get_cuda_stream first  *** */
+        multi_cuda_push_array(state.input, net.input_pinned_cpu, size, dnn_info);
+//        forward_network_gpu(net, state);
+        multi_forward_network_gpu(net, state, dnn_info);
 
         if (net.use_cuda_graph == 1) {
+            printf("**** Thesis %s IF4 in \"multi_network_predict_gpu\"\n", dnn_info.name);
             cudaStream_t stream0 = switch_stream(0);
             CHECK_CUDA(cudaStreamEndCapture(stream0, &graph));
             CHECK_CUDA(cudaGraphInstantiate(&instance, graph, NULL, NULL, 0));
@@ -793,9 +904,12 @@ float *multi_network_predict_gpu(network net, float *input, DNN_Info dnn_info)
             printf(" graph is captured... \n");
             CHECK_CUDA(cudaDeviceSynchronize());
         }
-        CHECK_CUDA(cudaStreamSynchronize(get_cuda_stream()));
+//        CHECK_CUDA(cudaStreamSynchronize(get_cuda_stream()));
+        /* *** get_cuda_stream second  *** */
+        CHECK_CUDA(cudaStreamSynchronize(multi_get_cuda_stream(dnn_info)));
     }
     else {
+        printf("**** Thesis %s ELSE in \"multi_network_predict_gpu\"\n", dnn_info.name);
         cudaStream_t stream0 = switch_stream(0);
         //printf(" cudaGraphLaunch \n");
         CHECK_CUDA( cudaGraphLaunch(instance, stream0) );
