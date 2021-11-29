@@ -186,16 +186,6 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
         }
 */
     }
-
-    if (net.benchmark_layers) {
-        printf("\n\nSorted by time (forward):\n");
-        qsort(sorted_avg_time_per_layer, net.n, sizeof(time_benchmark_layers), time_comparator);
-        for (i = 0; i < net.n; ++i) {
-            //printf("layer %d - type: %d - avg_time %lf ms \n", avg_time_per_layer[i].layer_id, avg_time_per_layer[i].layer_type, avg_time_per_layer[i].time);
-            printf("%d - fw-sort-layer %d - type: %d - avg_time %lf ms \n", i, sorted_avg_time_per_layer[i].layer_id, sorted_avg_time_per_layer[i].layer_type, sorted_avg_time_per_layer[i].time);
-        }
-    }
-
 /* Non-Priority Non-Preemptive Scheduling */
 #ifdef BASIC_MULTIDNN
     pthread_mutex_unlock(&layer_mutex);
@@ -208,6 +198,15 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
     pthread_mutex_unlock(&layer_mutex);
 
 #endif
+
+    if (net.benchmark_layers) {
+        printf("\n\nSorted by time (forward):\n");
+        qsort(sorted_avg_time_per_layer, net.n, sizeof(time_benchmark_layers), time_comparator);
+        for (i = 0; i < net.n; ++i) {
+            //printf("layer %d - type: %d - avg_time %lf ms \n", avg_time_per_layer[i].layer_id, avg_time_per_layer[i].layer_type, avg_time_per_layer[i].time);
+            printf("%d - fw-sort-layer %d - type: %d - avg_time %lf ms \n", i, sorted_avg_time_per_layer[i].layer_id, sorted_avg_time_per_layer[i].layer_type, sorted_avg_time_per_layer[i].time);
+        }
+    }
 
     //cudaStreamSynchronize(get_cuda_stream());   // sync CUDA-functions
     //cudaDeviceSynchronize();
@@ -947,7 +946,6 @@ float *multi_network_predict_gpu(network net, float *input, DNN_Info dnn_info)
 
 //        cuda_push_array(state.input, net.input_pinned_cpu, size);
         /* *** get_cuda_stream first  *** */
-        pthread_mutex_lock(&gpu_mutex);
         nvtx_name_gpu1 = nvtxRangeStartA("Cuda Push Array");
         cuda_push_array(state.input, net.input_pinned_cpu, size);
         nvtxRangeEnd(nvtx_name_gpu1);
@@ -955,7 +953,6 @@ float *multi_network_predict_gpu(network net, float *input, DNN_Info dnn_info)
         nvtx_name_gpu2 = nvtxRangeStartA("Forward Network GPU");
         multi_forward_network_gpu(net, state, dnn_info);
         nvtxRangeEnd(nvtx_name_gpu2);
-        pthread_mutex_unlock(&gpu_mutex);
 
         if (net.use_cuda_graph == 1) {
             printf("**** Thesis %s IF4 in \"multi_network_predict_gpu\"\n", dnn_info.name);

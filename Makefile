@@ -8,6 +8,11 @@ LIBSO=1
 ZED_CAMERA=0
 ZED_CAMERA_v2_8=0
 MULTIDNN=1
+BASIC_MULTIDNN=0
+PRIORITY_MULTIDNN=0
+PREEMPTION_MULTIDNN=0
+
+
 
 # set GPU=1 and CUDNN=1 to speedup on GPU
 # set CUDNN_HALF=1 to further speedup 3 x times (Mixed-precision on Tensor Cores) GPU: Volta, Xavier, Turing and higher
@@ -83,6 +88,15 @@ CFLAGS=-Wall -Wfatal-errors -Wno-unused-result -Wno-unknown-pragmas -fPIC
 
 ifeq ($(MULTIDNN), 1)
 CFLAGS+= -DMULTIDNN
+endif
+ifeq ($(BASIC_MULTIDNN), 1)
+CFLAGS+= -DBASIC_MULTIDNN
+endif
+ifeq ($(PRIORITY_MULTIDNN), 1)
+CFLAGS+= -DPRIORITY_MULTIDNN
+endif
+ifeq ($(PREEMPTION_MULTIDNN), 1)
+CFLAGS+= -DPREEMPTION_MULTIDNN
 endif
 
 ifeq ($(DEBUG), 1)
