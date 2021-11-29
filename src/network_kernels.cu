@@ -906,6 +906,7 @@ float *network_predict_gpu(network net, float *input)
 
 nvtxRangeId_t nvtx_name_gpu1;
 nvtxRangeId_t nvtx_name_gpu2;
+pthread_mutex_t gpu_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 float *multi_network_predict_gpu(network net, float *input, DNN_Info dnn_info)
 {
@@ -946,6 +947,7 @@ float *multi_network_predict_gpu(network net, float *input, DNN_Info dnn_info)
 
 //        cuda_push_array(state.input, net.input_pinned_cpu, size);
         /* *** get_cuda_stream first  *** */
+        pthread_mutex_lock(&gpu_mutex);
         nvtx_name_gpu1 = nvtxRangeStartA("Cuda Push Array");
         cuda_push_array(state.input, net.input_pinned_cpu, size);
         nvtxRangeEnd(nvtx_name_gpu1);
@@ -953,6 +955,7 @@ float *multi_network_predict_gpu(network net, float *input, DNN_Info dnn_info)
         nvtx_name_gpu2 = nvtxRangeStartA("Forward Network GPU");
         multi_forward_network_gpu(net, state, dnn_info);
         nvtxRangeEnd(nvtx_name_gpu2);
+        pthread_mutex_unlock(&gpu_mutex);
 
         if (net.use_cuda_graph == 1) {
             printf("**** Thesis %s IF4 in \"multi_network_predict_gpu\"\n", dnn_info.name);
