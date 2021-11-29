@@ -903,6 +903,7 @@ void run_multidnn(int argc, char **argv)
             dnn_buffer[idx].on = 0;
             dnn_buffer[idx].period = period;
             dnn_buffer[idx].info.name = name;
+            dnn_buffer[idx].info.ID = idx;
             dnn_buffer[idx].info.prior = prior;
             dnn_buffer[idx].info.stream_number = idx+1;
         
@@ -1016,6 +1017,7 @@ void run_multidnn(int argc, char **argv)
             dnn_buffer[idx].on = 0;
             dnn_buffer[idx].period = period;
             dnn_buffer[idx].info.name = name;
+            dnn_buffer[idx].info.ID = idx;
             dnn_buffer[idx].info.prior = prior;
             dnn_buffer[idx].info.stream_number = idx+1;
         

@@ -64,6 +64,9 @@ int time_comparator(const void *pa, const void *pb)
 DNN_State waiting_DNN[2];
 DNN_State running_DNN;
 pthread_mutex_t layer_mutex = PTHREAD_MUTEX_INITIALIZER;
+#define Layer_Quantum_SEC 0
+#define Layer_Quantum_NSEC 1000
+struct timespec layer_quantum = {Layer_Quantum_SEC, Layer_Quantum_NSEC};
 
 void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_info)
 {
@@ -86,13 +89,18 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
 
     /* Register Wating State  */
     waiting_DNN[dnn_info.ID].release = 1;
+    int dnn_id = dnn_info.ID;
+    waiting_DNN[dnn_id].ID = dnn_id;
     waiting_DNN[dnn_info.ID].prior = dnn_info.prior; 
 
-    /* Register Running State  */
-    if (running_DNN.release == 0) {
-        running_DNN.release = 1;
-        running_DNN.prior = waiting_DNN[dnn_info.ID].prior;
-    }
+//    /* Register Running State  */
+//    if (running_DNN.release == 0) {
+//        running_DNN.release = 1;
+//        running_DNN.ID = waiting_DNN[dnn_info.ID].ID;
+//        running_DNN.prior = waiting_DNN[dnn_info.ID].prior;
+//
+//        waiting_DNN[dnn_info.ID].release = 0;
+//    }
 
 /* Non-Priority Non-Preemptive Scheduling */
 #ifdef BASIC_MULTIDNN
@@ -101,18 +109,44 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
 
 /* Priority Non-Preemptive Scheduling */
 #ifdef PRIORITY_MULTIDNN
-
     pthread_mutex_lock(&layer_mutex);
-
 #endif
-
 
     for(i = 0; i < net.n; ++i){
 
+/* Priority based Preemptive Scheduling */
+#ifdef PREEMPTION_MULTIDNN
+        while (waiting_DNN[(dnn_id + 1)%2].release) {  // IF other DNN release
+            if (waiting_DNN[dnn_id].prior > waiting_DNN[(dnn_id + 1)%2].prior) {
+                break;
+            }
+            nanosleep(&layer_quantum, NULL);
+        }
 
+//        int waiting_count = 0;
+//        for (int idx = 0; idx <= 1; ++idx) {
+//            if (waiting_DNN[idx].release) {
+//                if (waiting_DNN[idx].prior <= running_DNN.prior) {                    
+//                    waiting_count += 1;
+//                } else {  // If    Waiting > Running
+//                    DNN_State tmp_state = running_DNN;
+//                    running_DNN = waiting_DNN[idx];
+//                    waiting_DNN[tmp_state.ID] = tmp_state;
+//
+//                }
+//
+//            } else {
+//                waiting_count += 1;
+//            }
+//        }
+//
+//        if (waiting_count == 2) { // No Waiting DNN  OR  Running is High
+//
+//            pthread_mutex_lock(&layer_mutex);
+//
+//        }
 
-
-
+#endif
 
 
         state.index = i;
@@ -185,18 +219,23 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
             cvDestroyAllWindows();
         }
 */
+
+/* Priority based Preemptive Scheduling */
+#ifdef PREEMPTION_MULTIDNN
+//    pthread_mutex_unlock(&layer_mutex);
+#endif
     }
-/* Non-Priority Non-Preemptive Scheduling */
+
+    waiting_DNN[dnn_id].release = 0;
+
+/* Non-Priority based Non-Preemptive Scheduling */
 #ifdef BASIC_MULTIDNN
     pthread_mutex_unlock(&layer_mutex);
-
 #endif
 
-/* Priority Non-Preemptive Scheduling */
+/* Priority based Non-Preemptive Scheduling */
 #ifdef PRIORITY_MULTIDNN
-
     pthread_mutex_unlock(&layer_mutex);
-
 #endif
 
     if (net.benchmark_layers) {
