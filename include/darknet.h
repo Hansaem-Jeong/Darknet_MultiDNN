@@ -1016,12 +1016,24 @@ typedef struct box_label {
 
 typedef struct DNN_INFO {
     char* name;
+    int ID;
     char* type;
+
+    /* state */
+    int running;
+    int waiting;
+    int release;
 
     int stream_number;
 
     int prior;
 } DNN_Info;
+
+typedef struct DNN_STATE {
+    int release;
+    int ID;
+    int prior;
+} DNN_State;
 
 
 // parser.c

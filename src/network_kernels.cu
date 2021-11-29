@@ -59,6 +59,10 @@ int time_comparator(const void *pa, const void *pb)
     return 0;
 }
 
+DNN_State waiting_DNN[2];
+DNN_State running_DNN;
+pthread_mutex_t layer_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_info)
 {
     static time_benchmark_layers *avg_time_per_layer = NULL;
@@ -77,9 +81,34 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
     //printf("\n");
     state.workspace = net.workspace;
     int i;
+
+    /* Register Wating State  */
+    waiting_DNN[dnn_info.ID].release = 1;
+    waiting_DNN[dnn_info.ID].prior = dnn_info.prior; 
+
+    /* Register Running State  */
+    if (running_DNN.release == 0) {
+        running_DNN.release = 1;
+        running_DNN.prior = waiting_DNN[dnn_info.ID].prior;
+    }
+
+/* Non-Priority Non-Preemptive Scheduling */
+#ifdef BASIC_MULTIDNN
+    pthread_mutex_lock(&layer_mutex);
+
+#endif
+
     for(i = 0; i < net.n; ++i){
+
+
+
+
+
+
+
         state.index = i;
         layer l = net.layers[i];
+/*        
         if(l.delta_gpu && state.train){
             printf("********* Thesis %s IF2 in \"forward_network_gpu\"\n", dnn_info.name);
             fill_ongpu(l.outputs * l.batch, 0, l.delta_gpu, 1);
@@ -89,9 +118,9 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
             printf("********* Thesis %s IF3 in \"forward_network_gpu\"\n", dnn_info.name);
             start_time = get_time_point();
         }
-
+*/
         l.forward_gpu(l, state);
-
+/*
         if (net.benchmark_layers) {
             printf("********* Thesis %s IF4 in \"forward_network_gpu\"\n", dnn_info.name);
             CHECK_CUDA(cudaDeviceSynchronize());
@@ -116,6 +145,7 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
             cudaStreamSynchronize(multi_get_cuda_stream(dnn_info));
 
         }
+*/        
         state.input = l.output_gpu;
         //cudaDeviceSynchronize();
 
@@ -156,6 +186,12 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
             printf("%d - fw-sort-layer %d - type: %d - avg_time %lf ms \n", i, sorted_avg_time_per_layer[i].layer_id, sorted_avg_time_per_layer[i].layer_type, sorted_avg_time_per_layer[i].time);
         }
     }
+
+/* Non-Priority Non-Preemptive Scheduling */
+#ifdef BASIC_MULTIDNN
+    pthread_mutex_unlock(&layer_mutex);
+
+#endif
 
     //cudaStreamSynchronize(get_cuda_stream());   // sync CUDA-functions
     //cudaDeviceSynchronize();

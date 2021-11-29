@@ -158,6 +158,7 @@ void *demo_classification_thread(void *arg)
     }
 
     printf("---- Success Classifier Network setting\n");
+    printf("#### Thesis Classifier -> Network net.n: %d\n", net_c.n); 
 
     net_c.benchmark_layers = benchmark_layers;
     set_batch_network(&net_c, 1);
@@ -605,6 +606,8 @@ void *demo_detector_thread(void *arg)
 #endif
         error("Couldn't connect to webcam.", DARKNET_LOC);
     }
+
+    printf("#### Thesis Detector -> Network net.n: %d\n", net.n); 
 
     layer l = net.layers[net.n-1];
     int j;
