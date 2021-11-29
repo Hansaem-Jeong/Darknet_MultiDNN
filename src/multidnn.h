@@ -11,9 +11,9 @@ typedef enum KindofLayer {
 
 /* *** Choise Scheduling Type *** */
 /* Non-Priority based Non-Preemptive Scheduling */
-#define BASIC_MULTIDNN
+//#define BASIC_MULTIDNN
 /* Priority based Non-Preemptive Scheduling */
-//#define PRIORITY_MULTIDNN
+#define PRIORITY_MULTIDNN
 /* Priority based Preemptive Scheduling */
 //#define PREEMPTION_MULTIDNN
 

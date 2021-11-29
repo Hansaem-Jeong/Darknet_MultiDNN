@@ -95,8 +95,15 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
 /* Non-Priority Non-Preemptive Scheduling */
 #ifdef BASIC_MULTIDNN
     pthread_mutex_lock(&layer_mutex);
+#endif
+
+/* Priority Non-Preemptive Scheduling */
+#ifdef PRIORITY_MULTIDNN
+
+    pthread_mutex_lock(&layer_mutex);
 
 #endif
+
 
     for(i = 0; i < net.n; ++i){
 
@@ -189,6 +196,13 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
 
 /* Non-Priority Non-Preemptive Scheduling */
 #ifdef BASIC_MULTIDNN
+    pthread_mutex_unlock(&layer_mutex);
+
+#endif
+
+/* Priority Non-Preemptive Scheduling */
+#ifdef PRIORITY_MULTIDNN
+
     pthread_mutex_unlock(&layer_mutex);
 
 #endif

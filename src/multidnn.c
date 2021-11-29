@@ -1109,7 +1109,7 @@ void run_multidnn(int argc, char **argv)
             detector_timer += (present_quantum_time);
             classifier_timer += (present_quantum_time);
 
-#ifdef PRIORITY_H
+#ifdef PRIORITY_MULTIDNN
             if (classifier_timer >= CLASSIFIER_PERIOD) {
 //                printf("\n\n\nClassifier Release, Time: %.4lf\n\n\n", multi_get_wall_time());
 
@@ -1139,7 +1139,7 @@ void run_multidnn(int argc, char **argv)
                 detector_count += 1;
                 detector_timer = 0;   
             }
-#ifndef PRIORITY_H
+#ifndef PRIORITY_MULTIDNN
             if (classifier_timer >= CLASSIFIER_PERIOD) {
 //                printf("\n\n\nClassifier Release, Time: %.4lf\n\n\n", multi_get_wall_time());
 
