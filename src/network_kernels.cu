@@ -1,5 +1,6 @@
 #include "dark_cuda.h"
 #include "darknet.h"
+#include "multidnn.h"
 
 #include <stdio.h>
 #include <time.h>
@@ -51,6 +52,17 @@ typedef struct time_benchmark_layers {
     int layer_id, layer_type;
 } time_benchmark_layers;
 
+double m_get_wall_time()
+{
+    
+    struct timespec after_boot;
+    clock_gettime(CLOCK_MONOTONIC, &after_boot);
+    return (after_boot.tv_sec*1000 + after_boot.tv_nsec*0.000001);
+    
+}
+
+
+
 int time_comparator(const void *pa, const void *pb)
 {
     time_benchmark_layers a = *(time_benchmark_layers *)pa;
@@ -61,15 +73,20 @@ int time_comparator(const void *pa, const void *pb)
     return 0;
 }
 
-DNN_State waiting_DNN[2];
+DNN_State waiting_DNN[10];
 DNN_State running_DNN;
 pthread_mutex_t layer_mutex = PTHREAD_MUTEX_INITIALIZER;
 #define Layer_Quantum_SEC 0
 #define Layer_Quantum_NSEC 1000
 struct timespec layer_quantum = {Layer_Quantum_SEC, Layer_Quantum_NSEC};
 
-void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_info)
+//void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_info)
+void multi_forward_network_gpu(network net, network_state state, MultiDNN *m)
 {
+    DNN_Info dnn_info = m->info;
+    int just_once = 1;
+    int meas_count = m->count;
+
     static time_benchmark_layers *avg_time_per_layer = NULL;
     static time_benchmark_layers *sorted_avg_time_per_layer = NULL;
     double start_time, end_time;
@@ -92,6 +109,7 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
     int dnn_id = dnn_info.ID;
     waiting_DNN[dnn_id].ID = dnn_id;
     waiting_DNN[dnn_info.ID].prior = dnn_info.prior; 
+    printf("********* Thesis %s 2 in \"forward_network_gpu\"\n", dnn_info.name);
 
 //    /* Register Running State  */
 //    if (running_DNN.release == 0) {
@@ -116,11 +134,19 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
 
 /* Priority based Preemptive Scheduling */
 #ifdef PREEMPTION_MULTIDNN
-        while (waiting_DNN[(dnn_id + 1)%2].release) {  // IF other DNN release
-            if (waiting_DNN[dnn_id].prior > waiting_DNN[(dnn_id + 1)%2].prior) {
-                break;
+        for (int p = 0; p<3;++p) {
+            if (dnn_id == p) continue;
+            while (waiting_DNN[p].release) {  // IF other DNN release
+                if (waiting_DNN[dnn_id].prior > waiting_DNN[p].prior) {
+                    break;
+                }
+                nanosleep(&layer_quantum, NULL);
             }
-            nanosleep(&layer_quantum, NULL);
+        }
+        if (just_once) {
+            m->overhead_time[meas_count] = m_get_wall_time();
+
+            just_once = 0;
         }
 
 //        int waiting_count = 0;
@@ -151,27 +177,23 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
 
         state.index = i;
         layer l = net.layers[i];
-/*        
+        
         if(l.delta_gpu && state.train){
-            printf("********* Thesis %s IF2 in \"forward_network_gpu\"\n", dnn_info.name);
             fill_ongpu(l.outputs * l.batch, 0, l.delta_gpu, 1);
         }
 
         if (net.benchmark_layers) {
-            printf("********* Thesis %s IF3 in \"forward_network_gpu\"\n", dnn_info.name);
             start_time = get_time_point();
         }
-*/
+
         l.forward_gpu(l, state);
-/*
+
         if (net.benchmark_layers) {
-            printf("********* Thesis %s IF4 in \"forward_network_gpu\"\n", dnn_info.name);
             CHECK_CUDA(cudaDeviceSynchronize());
             end_time = get_time_point();
             const double took_time = (end_time - start_time) / 1000;
             const double alpha = 0.9;
             if (avg_time_per_layer[i].time == 0) {
-                printf("********* Thesis %s IF5 in \"forward_network_gpu\"\n", dnn_info.name);
                 avg_time_per_layer[i].layer_id = i;
                 avg_time_per_layer[i].layer_type = l.type;
                 avg_time_per_layer[i].time = took_time;
@@ -183,14 +205,12 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
         }
 
         if(net.wait_stream) {
-            printf("********* Thesis %s IF6 in \"forward_network_gpu\"\n", dnn_info.name);
-//            cudaStreamSynchronize(get_cuda_stream());
-            cudaStreamSynchronize(multi_get_cuda_stream(dnn_info));
+            cudaStreamSynchronize(get_cuda_stream());
 
         }
-*/        
+        
         state.input = l.output_gpu;
-        //cudaDeviceSynchronize();
+        cudaDeviceSynchronize(); // multi
 
         /*
         cuda_pull_array(l.output_gpu, l.output, l.outputs);
@@ -199,9 +219,9 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
         int k;
         for (k = 0; k < l.outputs; ++k) avg_val += l.output[k];
         printf(" i: %d - avg_val = %f \n", i, avg_val / l.outputs);
-        */
+        */  
 
-/*
+        /*
         cuda_pull_array(l.output_gpu, l.output, l.batch*l.outputs);
         if (l.out_w >= 0 && l.out_h >= 1 && l.c >= 3) {
             int j;
@@ -218,13 +238,15 @@ void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_in
             cvWaitKey(0); // wait press-key in console
             cvDestroyAllWindows();
         }
-*/
+        */
+
 
 /* Priority based Preemptive Scheduling */
 #ifdef PREEMPTION_MULTIDNN
 //    pthread_mutex_unlock(&layer_mutex);
 #endif
     }
+    printf("********* Thesis %s 3 in \"forward_network_gpu\"\n", dnn_info.name);
 
     waiting_DNN[dnn_id].release = 0;
 
@@ -946,8 +968,10 @@ nvtxRangeId_t nvtx_name_gpu1;
 nvtxRangeId_t nvtx_name_gpu2;
 pthread_mutex_t gpu_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-float *multi_network_predict_gpu(network net, float *input, DNN_Info dnn_info)
+//float *multi_network_predict_gpu(network net, float *input, DNN_Info dnn_info)
+float *multi_network_predict_gpu(network net, float *input, MultiDNN *m)
 {
+    DNN_Info dnn_info = m->info;
     printf("**** Thesis %s in \"multi_network_predict_gpu\"\n", dnn_info.name);
     if (net.gpu_index != cuda_get_device()) {
 
@@ -985,13 +1009,23 @@ float *multi_network_predict_gpu(network net, float *input, DNN_Info dnn_info)
 
 //        cuda_push_array(state.input, net.input_pinned_cpu, size);
         /* *** get_cuda_stream first  *** */
+#ifdef NVTX_MULTIDNN        
         nvtx_name_gpu1 = nvtxRangeStartA("Cuda Push Array");
+#endif
+        printf(" **** Thesis %s check 1\n", dnn_info.name);
         cuda_push_array(state.input, net.input_pinned_cpu, size);
+#ifdef NVTX_MULTIDNN
         nvtxRangeEnd(nvtx_name_gpu1);
+#endif
 //        forward_network_gpu(net, state);
+#ifdef NVTX_MULTIDNN
         nvtx_name_gpu2 = nvtxRangeStartA("Forward Network GPU");
-        multi_forward_network_gpu(net, state, dnn_info);
+#endif
+        printf(" **** Thesis %s check 2\n", dnn_info.name);
+        multi_forward_network_gpu(net, state, m);
+#ifdef NVTX_MULTIDNN
         nvtxRangeEnd(nvtx_name_gpu2);
+#endif
 
         if (net.use_cuda_graph == 1) {
             printf("**** Thesis %s IF4 in \"multi_network_predict_gpu\"\n", dnn_info.name);
@@ -1002,9 +1036,8 @@ float *multi_network_predict_gpu(network net, float *input, DNN_Info dnn_info)
             printf(" graph is captured... \n");
             CHECK_CUDA(cudaDeviceSynchronize());
         }
-//        CHECK_CUDA(cudaStreamSynchronize(get_cuda_stream()));
+        CHECK_CUDA(cudaStreamSynchronize(get_cuda_stream()));
         /* *** get_cuda_stream second  *** */
-        CHECK_CUDA(cudaStreamSynchronize(multi_get_cuda_stream(dnn_info)));
     }
     else {
         printf("**** Thesis %s ELSE in \"multi_network_predict_gpu\"\n", dnn_info.name);

@@ -1,0 +1,9 @@
+
+
+
+./darknet multidnn 3 cfg/coco.data cfg/imagenet1k.data \
+yolov3 densenet201 darknet53 \
+cfg/yolov3.cfg weights/yolov3.weights \
+cfg/densenet201.cfg weights/densenet201.weights \
+cfg/darknet53.cfg weights/darknet53.weights
+

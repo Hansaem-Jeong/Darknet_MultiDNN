@@ -1,0 +1,7 @@
+
+
+
+./darknet multidnn 2 yolov2 densenet201 cfg/coco.data cfg/imagenet1k.data cfg/yolov2.cfg weights/yolov2.weights \
+cfg/densenet201.cfg weights/densenet201.weights
+
+

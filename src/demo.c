@@ -252,13 +252,15 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
         det_s = in_s;
     }
 
+
     int count = 0;
+    /*
     if(!prefix && !dont_show){
         int full_screen = 0;
 //        create_window_cv("Demo", full_screen, 1352, 1013);
         create_window_cv("Demo", full_screen, 512, 512);
     }
-
+*/
 
     write_cv* output_video_writer = NULL;
     if (out_filename && !flag_exit)
@@ -337,6 +339,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 
             printf("\nFPS:%.1f \t AVG_FPS:%.1f\n", fps, avg_fps);
 
+/* dont display
             if(!prefix){
                 if (!dont_show) {
                     const int each_frame = max_val_cmp(1, avg_fps / 60);
@@ -358,6 +361,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
                 sprintf(buff, "%s_%08d.jpg", prefix, count);
                 if(show_img) save_cv_jpg(show_img, buff);
             }
+*/            
 
             // if you run it with param -mjpeg_port 8090  then open URL in your web-browser: http://localhost:8090
             if (mjpeg_port > 0 && show_img) {

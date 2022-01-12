@@ -1289,7 +1289,7 @@ void demo_classifier(char *datacfg, char *cfgfile, char *weightfile, int cam_ind
     int* indexes = (int*)xcalloc(top, sizeof(int));
 
     if(!cap) error("Couldn't connect to webcam.", DARKNET_LOC);
-    if (!benchmark) create_window_cv("Classifier", 0, 512, 512);
+//    if (!benchmark) create_window_cv("Classifier", 0, 512, 512);
     float fps = 0;
     int i;
 
@@ -1319,7 +1319,7 @@ void demo_classifier(char *datacfg, char *cfgfile, char *weightfile, int cam_ind
         if (!benchmark) {
             in = get_image_from_stream_cpp(cap);
             in_s = resize_image(in, net.w, net.h);
-            show_image(in, "Classifier");
+            //show_image(in, "Classifier");
         }
         else {
             static image tmp;

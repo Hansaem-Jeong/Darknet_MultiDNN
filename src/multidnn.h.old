@@ -1,6 +1,3 @@
-#ifndef MULTIDNN_H_
-#define MULTIDNN_H_
-
 #include <stdio.h>
 #include <time.h>
 #include "darknet.h"
@@ -21,15 +18,17 @@ typedef enum KindofLayer {
 
 #define QUANTUM_ITERATION 10000
 
-#define MEAS_THRESHOLD 100
+#define MEASUREMENT_ITERATION 550
+#define MEAS_THRESHOLD 30
 
 #define MEASUREMENT_PATH "measure"
 #define MEASUREMENTD_FILE "/d_measure.csv"
 #define MEASUREMENTC_FILE "/c_measure.csv"
 
-#define DETECTOR_PERIOD 300
-#define CLASSIFIER_PERIOD 200
-#define TMP_PERIOD 250
+#define DETECTOR_PERIOD 210
+#define CLASSIFIER_PERIOD 210
+// priority-based, classifier HIGH set
+//#define PRIORITY_H
 
 
 #define QUANTUM_SEC 0
@@ -38,15 +37,15 @@ typedef enum KindofLayer {
 
 #define ALEXNET_SEC 0
 #define ALEXNET_NSEC 100000000 // 100ms
-#define ALEXNET_PRIOR 7
+#define ALEXNET_PRIOR 5
 
 #define DARKNET19_SEC 0
 #define DARKNET19_NSEC 100000000 // 100ms
-#define DARKNET19_PRIOR 8
+#define DARKNET19_PRIOR 6
 
 #define DENSENET201_SEC 0
 #define DENSENET201_NSEC 100000000 // 100ms
-#define DENSENET201_PRIOR 9
+#define DENSENET201_PRIOR 7
 
 #define CLASSIFIER_CNT 100
 
@@ -115,9 +114,16 @@ typedef struct ARGS {
     int argc;
     char **argv;
 } Args;
-
-
 /*
+typedef struct IMAGE_FRAME {
+    image frame;
+    int sequence;
+    double timestamp;
+
+} ImageFrame;
+*/ // in include/darknet.h
+
+
 typedef struct MULTI_DNN {
 
     volatile int on;
@@ -141,6 +147,7 @@ typedef struct MULTI_DNN {
 
 
     ImageFrame detect_section;
+    ImageFrame display_section; 
     float *prediction;
 
     int count;
@@ -148,15 +155,16 @@ typedef struct MULTI_DNN {
     double frame_timestamp[MEASUREMENT_ITERATION];
     double release_period[MEASUREMENT_ITERATION];
     double release_time[MEASUREMENT_ITERATION]; 
-    double overhead_time[MEASUREMENT_ITERATION];
+    double onrunning_time[MEASUREMENT_ITERATION];
+    double complete_time[MEASUREMENT_ITERATION];
 
     double before_prediction[MEASUREMENT_ITERATION];
     double after_prediction[MEASUREMENT_ITERATION];
-    double prediction_time[MEASUREMENT_ITERATION];
 
+    double display_start[MEASUREMENT_ITERATION];
+    double display_end[MEASUREMENT_ITERATION];
 
 } MultiDNN;
-*/
 
 double multi_get_wall_time();
 void *demo_detector_thread(void *arg);
@@ -165,7 +173,7 @@ void *demo_classification_thread(void *arg);
 
 void *multi_fetch_in_thread(void *ptr);
 void *multi_detect_in_thread(void *ptr);
+void *multi_display_in_thread_sync(void *ptr);
+void *multi_display_in_thread(void *arg);
 
 void run_multidnn(int argc, char **argv);
-
-#endif

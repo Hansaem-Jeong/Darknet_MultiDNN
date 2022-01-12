@@ -878,6 +878,7 @@ extern "C" image get_image_from_stream_resize_with_timestamp(cap_cv *cap, int w,
     cv::Mat *src = NULL;
     cv::Mat *tmp = NULL;
 
+
     static int once = 1;
     if (once) {
         once = 0;
@@ -894,14 +895,15 @@ extern "C" image get_image_from_stream_resize_with_timestamp(cap_cv *cap, int w,
         src = (cv::Mat*)get_capture_frame_cv_with_timestamp(cap, f);
 
     if (!wait_for_stream(cap, src, dont_close)) return make_empty_image(0, 0, 0);
+    
     tmp = src;
 
     image tmp_im = mat_to_image(*tmp);
     rgbgr_image(tmp_im);
     f->classi_frame = resize_image(tmp_im, wc, wh);
 
-    *(cv::Mat **)in_img = src;
-    f->img = (void *)src;
+//    *(cv::Mat **)in_img = src;
+    //f->img = (void *)src;
 
     cv::Mat new_img = cv::Mat(h, w, CV_8UC(c));
     cv::resize(*src, new_img, new_img.size(), 0, 0, cv::INTER_LINEAR);

@@ -12,8 +12,6 @@ BASIC_MULTIDNN=0
 PRIORITY_MULTIDNN=0
 PREEMPTION_MULTIDNN=1
 
-
-
 # set GPU=1 and CUDNN=1 to speedup on GPU
 # set CUDNN_HALF=1 to further speedup 3 x times (Mixed-precision on Tensor Cores) GPU: Volta, Xavier, Turing and higher
 # set AVX=1 and OPENMP=1 to speedup on CPU (if error occurs then set AVX=0)

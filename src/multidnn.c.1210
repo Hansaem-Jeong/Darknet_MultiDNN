@@ -50,7 +50,7 @@ volatile int webcam_is_ok;
 volatile int det_count = 0;
 volatile int cla_count = 0;
 
-ImageFrame once_frame[3];
+ImageFrame once_frame;
 ImageFrame fetch_frame[10];
 ImageFrame classi_frame[10];
 int fetch_idx;
@@ -72,7 +72,7 @@ static int demo_classes;
 static int nboxes = 0;
 static detection *dets = NULL;
 
-static network net[3];
+static network net;
 static network net_c[10];
 static image in_s ;
 static image det_s;
@@ -99,7 +99,7 @@ static int letter_box = 0;
 
 static const int thread_wait_ms = 1;
 static volatile int run_fetch_in_thread = 0;
-static volatile int run_detect_in_thread[3] = { 0 };
+static volatile int run_detect_in_thread = 0;
 static volatile int run_classification_in_thread[10] = { 0 };
 
 static volatile int run_prediction_gpu = 0;
@@ -175,7 +175,7 @@ void *multi_classification_in_thread(void *ptr)
         int this_idx = cla_thread_idx;
         printf("Thesis Check Start Classification Thread\n");
         //dnn_buffer[this_idx].detect_section = classi_frame[classification_idx];
-        dnn_buffer[this_idx].detect_section = once_frame[0];
+        dnn_buffer[this_idx].detect_section = once_frame;
         dnn_buffer[this_idx].frame_timestamp[cla_count] = dnn_buffer[this_idx].detect_section.timestamp;
 /*        
         det_s = in_s;
@@ -196,12 +196,7 @@ void *multi_classification_in_thread(void *ptr)
 
         //float *predictions = network_predict(net_c, in_c.data);
 //        nvtx_name_CLA = nvtxRangeStartA("MultiDNN - Classifier");
-        //float *predictions = multi_network_predict(net_c[cla_thread_idx], in_c.data, dnn_buffer[this_idx].info);
-        float *predictions = multi_network_predict(net_c[cla_thread_idx], in_c.data, &dnn_buffer[this_idx]);
-
-        dnn_buffer[this_idx].overhead[dnn_buffer[this_idx].count] = dnn_buffer[this_idx].overhead_time[dnn_buffer[this_idx].count]-dnn_buffer[this_idx].release_time[dnn_buffer[this_idx].count];
-        printf(" ==-=-=-== THESIS %lf\n", dnn_buffer[this_idx].overhead);        
-
+        float *predictions = multi_network_predict(net_c[cla_thread_idx], in_c.data, dnn_buffer[this_idx].info);
 //        nvtxRangeEnd(nvtx_name_CLA);
 
 //        dnn_buffer[this_idx].after_prediction[tmp_count] = multi_get_wall_time();
@@ -228,7 +223,7 @@ void *multi_fetch_in_thread(void *ptr)
     printf("Thesis Check dnn_buffer[0].on : %d\n", dnn_buffer[0].on);
     int since_now = 1;
     while (!custom_atomic_load_int(&flag_exit)) {
-        while(!dnn_buffer[1].on) {};
+        while(!dnn_buffer[0].on) {};
 //        printf("thesis check in fetch thread while\n");
         
         int dont_close_stream = 0;    // set 1 if your IP-camera periodically turns off and turns on video-stream
@@ -261,10 +256,7 @@ void *multi_fetch_in_thread(void *ptr)
         if (since_now) {
             printf("Thesis Check Before get_image_from_stream_resize_with_timestamp\n");
         //in_s = get_image_from_stream_resize_with_timestamp(cap, net.w, net.h, net.c, &in_img, dont_close_stream, &fetch_frame[fetch_idx], net_c[CLA].w, net_c[CLA].h);
-            in_s = get_image_from_stream_resize_with_timestamp(cap, net[0].w, net[0].h, net[0].c, &in_img, dont_close_stream, &once_frame[0], net_c[CLA].w, net_c[CLA].h);
-            
-            //in_s = get_image_from_stream_resize_with_timestamp(cap, net[2].w, net[2].h, net[2].c, &in_img, dont_close_stream, &once_frame[2], net_c[CLA].w, net_c[CLA].h);
-            
+            in_s = get_image_from_stream_resize_with_timestamp(cap, net.w, net.h, net.c, &in_img, dont_close_stream, &once_frame, net_c[CLA].w, net_c[CLA].h);
             printf("Thesis Success Capture Image in Fetch Thread\n");
             since_now = 0;
         }
@@ -277,7 +269,7 @@ void *multi_fetch_in_thread(void *ptr)
 // unlock() 
 
         if (!in_s.data) {
-            printf("\n\n\n\nStream closed.\n\n");
+            printf("Stream closed.\n");
             custom_atomic_store_int(&flag_exit, 1);
             //exit(EXIT_FAILURE);
             return 0;
@@ -295,22 +287,21 @@ void *multi_fetch_in_thread(void *ptr)
 void *multi_detect_in_thread(void *ptr)
 {
     printf("thesis check start detect thread\n");
-    int det_thread_idx = *((int *)ptr);
     while (!custom_atomic_load_int(&flag_exit)) {
-        printf("thesis check in detect thread while\n");
-        while (!custom_atomic_load_int(&run_detect_in_thread[det_thread_idx])) {
+//        printf("thesis check in detect thread while\n");
+        while (!custom_atomic_load_int(&run_detect_in_thread)) {
             if (custom_atomic_load_int(&flag_exit)) return 0;
             this_thread_yield();
         }
         printf("Thesis Check Start Detect Thread\n");
         //dnn_buffer[DET].detect_section = fetch_frame[detect_idx];
-        dnn_buffer[det_thread_idx].detect_section = once_frame[det_thread_idx];
-        dnn_buffer[det_thread_idx].frame_timestamp[det_count] = dnn_buffer[det_thread_idx].detect_section.timestamp;
+        dnn_buffer[DET].detect_section = once_frame;
+        dnn_buffer[DET].frame_timestamp[det_count] = dnn_buffer[DET].detect_section.timestamp;
 /*        
         det_s = in_s;
         det_img = in_img;
 */
-        det_s = dnn_buffer[det_thread_idx].detect_section.frame;
+        det_s = dnn_buffer[DET].detect_section.frame;
 //        det_img = (mat_cv*)dnn_buffer[DET].detect_section.img;
 
 
@@ -319,19 +310,18 @@ void *multi_detect_in_thread(void *ptr)
 //        layer l = net.layers[net.n - 1];
         float *X = det_s.data;
         //float *prediction = 
-        dnn_buffer[det_thread_idx].before_prediction[tmp_count] = multi_get_wall_time();
+        dnn_buffer[DET].before_prediction[tmp_count] = multi_get_wall_time();
 
         //network_predict(net, X);
 //        nvtx_name_DET = nvtxRangeStartA("MultiDNN - Detector");
 //        printf("Thesis Check Start network_predict in Detect Thread\n");
-        //multi_network_predict(net[det_thread_idx], X, dnn_buffer[det_thread_idx].info);
-        multi_network_predict(net[det_thread_idx], X, &dnn_buffer[det_thread_idx]);
+        multi_network_predict(net, X, dnn_buffer[DET].info);
 //        printf("Thesis Check End network_predict in Detect Thread\n");
 //        nvtxRangeEnd(nvtx_name_DET);
 
-        dnn_buffer[det_thread_idx].after_prediction[tmp_count] = multi_get_wall_time();
+        dnn_buffer[DET].after_prediction[tmp_count] = multi_get_wall_time();
         printf("Detector DET: %d, tmp_count: %d, prediction_time: %0.1lf\n",
-        det_thread_idx, tmp_count, dnn_buffer[det_thread_idx].after_prediction[tmp_count]-dnn_buffer[det_thread_idx].before_prediction[tmp_count]);
+        DET, tmp_count, dnn_buffer[DET].after_prediction[tmp_count]-dnn_buffer[DET].before_prediction[tmp_count]);
 
 /*
         cv_images[demo_index] = det_img;
@@ -348,7 +338,7 @@ void *multi_detect_in_thread(void *ptr)
 //        show_img = det_img;
 //        printf("Thesis Check 3 Detect Thread\n");
 
-        dnn_buffer[det_thread_idx].release = 1; // += 1?
+        dnn_buffer[DET].release = 1; // += 1?
 
         //const float nms = .45;
         //if (nms) {
@@ -357,7 +347,7 @@ void *multi_detect_in_thread(void *ptr)
         //}
 //        printf("thesis detect, nboxes %d\n", nboxes);
 
-        custom_atomic_store_int(&run_detect_in_thread[det_thread_idx], 0);
+        custom_atomic_store_int(&run_detect_in_thread, 0);
     }
 
     printf("Thesis Out of Boundary Detect Thread\n");
@@ -410,17 +400,17 @@ void *demo_detector_thread(void *arg)
     printf("Demo\n");
 
 
-    net[idx] = parse_network_cfg_custom(cfgfile, 1, 1);    // set batch=1
+    net = parse_network_cfg_custom(cfgfile, 1, 1);    // set batch=1
     if(weightfile){
-        load_weights(&net[idx], weightfile);
+        load_weights(&net, weightfile);
     }
 
     printf("---- Success Detector Network setting\n");
 
-    if (net[idx].letter_box) letter_box = 1;
-    net[idx].benchmark_layers = benchmark_layers;
-    fuse_conv_batchnorm(net[idx]);
-    calculate_binary_weights(net[idx]);
+    if (net.letter_box) letter_box = 1;
+    net.benchmark_layers = benchmark_layers;
+    fuse_conv_batchnorm(net);
+    calculate_binary_weights(net);
     srand(2222222);
 
     dnn_buffer[idx].on = 1;
@@ -471,7 +461,7 @@ void run_multidnn(int argc, char **argv)
     for (int i = 0 ; i < numberof_dnn ; ++i) {
 //    for (int i = 1 ; i >= 0; --i) {
         args->idx = i;
-        if (i != 1) { // Detector: yolo
+        if (i == 0) { // Detector: yolo
             printf("-------------------------------------------\n");
             printf("Detector Create Part\n");
             int idx = i;
@@ -479,34 +469,24 @@ void run_multidnn(int argc, char **argv)
             char *name=NULL;
             int prior = 0;
             struct timespec period;
-            char *cfg;
-            char *weights;
            
-            if(0==strcmp(argv[6], "yolov2") && (i==0)) {
+            if(0==strcmp(argv[5], "yolov2")) {
                 name = "yolov2";
                 period.tv_sec = YOLOV2_SEC;
                 period.tv_nsec = YOLOV2_NSEC;
                 prior = YOLO_PRIOR;
-                cfg = argv[7];
-//            char *weights = (argc > 8) ? argv[8] : 0;
-                weights = argv[8];
-
-            } else if(0==strcmp(argv[6], "yolov3") && (i==0)) {
+        
+            } else if(0==strcmp(argv[5], "yolov3")) {
                 name = "yolov3";
                 period.tv_sec = YOLOV3_SEC;
                 period.tv_nsec = YOLOV3_NSEC;
                 prior = YOLO_PRIOR;
-                cfg = argv[7];
-//            char *weights = (argc > 8) ? argv[8] : 0;
-                weights = argv[8];
-
+        
             } else if(0==strcmp(argv[5], "yolov4")) {
                 name = "yolov4";
                 period.tv_sec = YOLOV4_SEC;
                 period.tv_nsec = YOLOV4_NSEC;
                 prior = YOLO_PRIOR;
-                cfg = argv[7];
-                weights = argv[8];
         
             } else if(0==strcmp(argv[5], "yolov2-tiny")) {
                 name = "yolov2-tiny";
@@ -565,6 +545,12 @@ void run_multidnn(int argc, char **argv)
             int ext_output = find_arg(argc, argv, "-ext_output");
             
             char *datacfg = argv[3];
+            char *cfg = argv[8];
+//            char *weights = (argc > 8) ? argv[8] : 0;
+            char *weights = argv[9];
+            if (weights)
+                if (strlen(weights) > 0)
+                    if (weights[strlen(weights) - 1] == 0x0d) weights[strlen(weights) - 1] = 0;
 //            char *filename = (argc > 17) ? argv[17] : 0;
         
             list *options = read_data_cfg(datacfg);
@@ -603,7 +589,7 @@ void run_multidnn(int argc, char **argv)
             free(args);
    
             custom_thread_t detect_thread = NULL;
-            if (custom_create_thread(&detect_thread, 0, multi_detect_in_thread, (void *)&idx)) error("Thread creation failed", DARKNET_LOC);
+            if (custom_create_thread(&detect_thread, 0, multi_detect_in_thread, 0)) error("Thread creation failed", DARKNET_LOC);
         
             printf("---------------------------- Creat Complete Detector\n");
 
@@ -621,13 +607,13 @@ void run_multidnn(int argc, char **argv)
             char *cfg;
             char *weights;
         
-            if(0==strcmp(argv[6], "alexnet") && (i==1)) {
-                name = "alexnet";
-                period.tv_sec = ALEXNET_SEC;
-                period.tv_nsec = ALEXNET_NSEC;
+            if(0==strcmp(argv[6], "densenet201") && (i<=1)) {
+                name = "densenet201";
+                period.tv_sec = DENSENET201_SEC;
+                period.tv_nsec = DENSENET201_NSEC;
                 prior = DENSENET201_PRIOR;
-                cfg = argv[9];
-                weights = argv[10];
+                cfg = argv[10];
+                weights = argv[11];
 
                 
         
@@ -719,21 +705,17 @@ void run_multidnn(int argc, char **argv)
     double present_quantum_time = 0;
     int classifier_count = 0;
     int detector_count = 0;
-    double start_quantum = 0;
     
     while(1) {
         
 
 //        printf("\n\n\nThesis Check Start   Main Quantum Counter\n\n\n");
-//        printf("%d\n", dnn_buffer[0].on);
-//        printf("%d\n", dnn_buffer[numberof_dnn-1].on);
-//        printf("%d\n", webcam_is_ok);
         if(dnn_buffer[0].on && dnn_buffer[numberof_dnn-1].on && webcam_is_ok) {
 //        if(dnn_buffer[0].on && webcam_is_ok) {
 
 //            printf("\n\n\nThesis Check Running Main Quantum Counter\n\n\n");
 //            printf("Thesis meas_counter: %d\n", meas_counter);
-            start_quantum = multi_get_wall_time();
+            double start_quantum = multi_get_wall_time();
             detector_timer += (present_quantum_time);
             classifier_timer += (present_quantum_time);
             tmp_timer += (present_quantum_time);
@@ -756,43 +738,35 @@ void run_multidnn(int argc, char **argv)
                 classifier_count += 1;
             }
             double tmp_timer = multi_get_wall_time() - start_quantum;
-#endif            
 
+            if (detector_timer + tmp_timer >= DETECTOR_PERIOD) {
+#endif
+                // Alexnet
             double c_timer = multi_get_wall_time() - start_quantum;
             if (tmp_timer + c_timer >= TMP_PERIOD) {
-                printf("\n\n\nDetector Release, Time: %.1lf\n\n\n", multi_get_wall_time());
+//            if (classifier_timer >= CLASSIFIER_PERIOD) {
+                printf("\n\n\nClassifier Release, Time: %.4lf\n\n\n", multi_get_wall_time());
 
 
-                custom_atomic_store_int(&run_detect_in_thread[0], 1);
+                custom_atomic_store_int(&run_classification_in_thread[2], 1);
+                
+                dnn_buffer[CLA].release_period[classifier_count] = classifier_timer + tmp_timer;
+                dnn_buffer[CLA].release_time[classifier_count] = multi_get_wall_time();
+//                printf("Classifier count: %d, release: %.4lf\n", classifier_count, dnn_buffer[CLA].release_time[classifier_count]);
 
-                detector_count += 1;
-                tmp_timer = 0;   
+                tmp_timer = 0;
+                tmp_c += 1;
             }
 
-//                // Alexnet
-//            double c_timer = multi_get_wall_time() - start_quantum;
-//            if (tmp_timer + c_timer >= TMP_PERIOD) {
-////            if (classifier_timer >= CLASSIFIER_PERIOD) {
-//                printf("\n\n\nClassifier Release, Time: %.4lf\n\n\n", multi_get_wall_time());
-//
-//
-//                custom_atomic_store_int(&run_classification_in_thread[2], 1);
-//                
-//                dnn_buffer[CLA].release_period[classifier_count] = classifier_timer + tmp_timer;
-//                dnn_buffer[CLA].release_time[classifier_count] = multi_get_wall_time();
-////                printf("Classifier count: %d, release: %.4lf\n", classifier_count, dnn_buffer[CLA].release_time[classifier_count]);
-//
-//                tmp_timer = 0;
-//                tmp_c += 1;
-//            }
-
+#ifndef PRIORITY_MULTIDNN
             if (detector_timer >= DETECTOR_PERIOD) {
+#endif                
                 printf("\n\n\nDetector Release, Time: %.1lf\n\n\n", multi_get_wall_time());
 
                 dnn_buffer[DET].count = detector_count;
                 det_count = detector_count;
 
-                custom_atomic_store_int(&run_detect_in_thread[2], 1);
+                custom_atomic_store_int(&run_detect_in_thread, 1);
 #ifdef PRIORITY_MULTIDNN
                 dnn_buffer[DET].release_period[detector_count] = detector_timer + tmp_timer;
 #endif
@@ -889,11 +863,11 @@ void run_multidnn(int argc, char **argv)
                     }
                 }
 
-                fprintf(fp, "%s,%s,%s\n", "d201", "a", "over");
+                fprintf(fp, "%s,%s\n", "d201", "a");
 
                 for (int i = MEAS_THRESHOLD; i < dnn_buffer[CLA].count; ++i) {
-                    fprintf(fp, "%.1lf,%.1lf,%.2lf\n", 
-                    dnn_buffer[1].prediction_time[i], dnn_buffer[2].prediction_time[i], dnn_buffer[1].overhead[i]);
+                    fprintf(fp, "%.1lf,%.1lf\n", 
+                    dnn_buffer[1].prediction_time[i], dnn_buffer[2].prediction_time[i]);
                 }
 
                 fclose(fp);

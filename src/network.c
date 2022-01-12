@@ -778,11 +778,12 @@ float *network_predict(network net, float *input)
     return out;
 }
 
-float *multi_network_predict(network net, float *input, DNN_Info dnn_info)
+//float *multi_network_predict(network net, float *input, DNN_Info dnn_info)
+float *multi_network_predict(network net, float *input, MultiDNN *m)
 {
 #ifdef GPU
-    printf("***** Thesis in \"network_predict\": %s\n", dnn_info.name);
-    if(gpu_index >= 0)  return multi_network_predict_gpu(net, input, dnn_info);
+    //if(gpu_index >= 0)  return multi_network_predict_gpu(net, input, dnn_info);
+    if(gpu_index >= 0)  return multi_network_predict_gpu(net, input, m);
 #endif
 
     network_state state = {0};

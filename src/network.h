@@ -2,6 +2,7 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 #include "darknet.h"
+#include "multidnn.h"
 
 #include <stdint.h>
 #include "layer.h"
@@ -96,12 +97,14 @@ float train_networks(network *nets, int n, data d, int interval);
 void sync_nets(network *nets, int n, int interval);
 float train_network_datum_gpu(network net, float *x, float *y);
 float *network_predict_gpu(network net, float *input);
-float *multi_network_predict_gpu(network net, float *input, DNN_Info dnn_info);
+//float *multi_network_predict_gpu(network net, float *input, DNN_Info dnn_info);
+float *multi_network_predict_gpu(network net, float *input, MultiDNN *m);
 float * get_network_output_gpu_layer(network net, int i);
 float * get_network_delta_gpu_layer(network net, int i);
 float *get_network_output_gpu(network net);
 void forward_network_gpu(network net, network_state state);
-void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_info);
+//void multi_forward_network_gpu(network net, network_state state, DNN_Info dnn_info);
+void multi_forward_network_gpu(network net, network_state state, MultiDNN *m);
 void backward_network_gpu(network net, network_state state);
 void update_network_gpu(network net);
 void forward_backward_network_gpu(network net, float *x, float *y);

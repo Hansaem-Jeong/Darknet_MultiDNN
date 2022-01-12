@@ -36,6 +36,9 @@
 
 typedef enum { UNUSED_DEF_VAL } UNUSED_ENUM_TYPE;
 
+// thesis Thesis
+#define MEASUREMENT_ITERATION 1140
+
 #ifdef GPU
 
 #include <cuda_runtime.h>
@@ -1035,6 +1038,70 @@ typedef struct DNN_STATE {
     int prior;
 } DNN_State;
 
+struct frame_data {
+    image frame;
+    image resize_frame;
+    void *p_frame;
+    size_t length;
+    double frame_timestamp;
+    int frame_sequence;
+    double select;
+};
+
+
+typedef struct IMAGE_FRAME {
+    image frame;
+    image classi_frame;
+    void* img;
+    
+    int sequence;
+    double timestamp;
+
+} ImageFrame;
+
+typedef struct MULTI_DNN {
+
+    volatile int on;
+    volatile int release;
+
+    DNN_Info info;
+
+    //char* name;
+    //char* type;
+    int numberof; // layer
+//    enum KindofLayer kind; 
+
+    //int prior;
+//    bool preemptive; // 1: enabled, 0: disabled
+//    float period_msec; 
+    struct timespec period;
+//    float deadline;
+
+    int lastlayer;
+//    context;
+
+
+    ImageFrame detect_section;
+    float *prediction;
+
+    int count;
+    int sequence;
+
+    double frame_timestamp[MEASUREMENT_ITERATION];
+    double release_period[MEASUREMENT_ITERATION];
+    double release_time[MEASUREMENT_ITERATION]; 
+    double overhead_time[MEASUREMENT_ITERATION];
+    double overhead[MEASUREMENT_ITERATION];
+
+    double before_prediction[MEASUREMENT_ITERATION];
+    double after_prediction[MEASUREMENT_ITERATION];
+    double prediction_time[MEASUREMENT_ITERATION];
+
+
+} MultiDNN;
+
+
+
 
 // parser.c
 LIB_API network *load_network(char *cfg, char *weights, int clear);
@@ -1052,7 +1119,8 @@ LIB_API void diounms_sort(detection *dets, int total, int classes, float thresh,
 
 // network.h
 LIB_API float *network_predict(network net, float *input);
-LIB_API float *multi_network_predict(network net, float *input, DNN_Info dnn_info);
+//LIB_API float *multi_network_predict(network net, float *input, DNN_Info dnn_info);
+LIB_API float *multi_network_predict(network net, float *input, MultiDNN *m);
 LIB_API float *network_predict_ptr(network *net, float *input);
 LIB_API detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num, int letter);
 LIB_API det_num_pair* network_predict_batch(network *net, image im, int batch_size, int w, int h, float thresh, float hier, int *map, int relative, int letter);
@@ -1132,26 +1200,7 @@ void show_total_time();
 LIB_API void set_track_id(detection *new_dets, int new_dets_num, float thresh, float sim_thresh, float track_ciou_norm, int deque_size, int dets_for_track, int dets_for_show);
 LIB_API int fill_remaining_id(detection *new_dets, int new_dets_num, int new_track_id, float thresh);
 
-struct frame_data {
-    image frame;
-    image resize_frame;
-    void *p_frame;
-    size_t length;
-    double frame_timestamp;
-    int frame_sequence;
-    double select;
-};
 
-
-typedef struct IMAGE_FRAME {
-    image frame;
-    image classi_frame;
-    void* img;
-    
-    int sequence;
-    double timestamp;
-
-} ImageFrame;
 
 // gemm.h
 LIB_API void init_cpu();

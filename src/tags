@@ -8,9 +8,9 @@ ACTIVATIONS_H	activations.h	2;"	d
 ACTIVATION_LAYER_H	activation_layer.h	2;"	d
 ADDRPOINTER	http_stream.cpp	36;"	d	file:
 AI2	convolutional_layer.c	23;"	d	file:
-ALEXNET_NSEC	multidnn.h	35;"	d
-ALEXNET_PRIOR	multidnn.h	36;"	d
-ALEXNET_SEC	multidnn.h	34;"	d
+ALEXNET_NSEC	multidnn.h	39;"	d
+ALEXNET_PRIOR	multidnn.h	40;"	d
+ALEXNET_SEC	multidnn.h	38;"	d
 ARGS	multidnn.h	/^typedef struct ARGS {$/;"	s
 ASN1_STRING_get0_data	httplib.h	/^inline const unsigned char *ASN1_STRING_get0_data(const ASN1_STRING *asn1) {$/;"	f
 AVGPOOL_LAYER_H	avgpool_layer.h	2;"	d
@@ -30,10 +30,10 @@ BufferStream	httplib.h	/^class BufferStream : public Stream {$/;"	c	namespace:ht
 CHECK_CUBLAS	dark_cuda.h	61;"	d
 CHECK_CUDA	dark_cuda.h	60;"	d
 CHECK_CUDNN	dark_cuda.h	97;"	d
-CLA	multidnn.h	66;"	d
-CLASSIFIER_CNT	multidnn.h	46;"	d
+CLA	multidnn.h	70;"	d
+CLASSIFIER_CNT	multidnn.h	50;"	d
 CLASSIFIER_H	classifier.h	2;"	d
-CLASSIFIER_PERIOD	multidnn.h	25;"	d
+CLASSIFIER_PERIOD	multidnn.h	29;"	d
 CLOCK_REALTIME	gettimeofday.h	9;"	d
 COL2IM_H	col2im.h	2;"	d
 CONNECTED_LAYER_H	connected_layer.h	2;"	d
@@ -61,9 +61,9 @@ CYCLE_OFFSET	avees.c	62;"	d	file:
 Client	httplib.h	/^class Client {$/;"	c	namespace:httplib
 Client	httplib.h	/^inline Client::Client(const char *host, int port, time_t timeout_sec)$/;"	f	class:httplib::Client
 DARKCUDA_H	dark_cuda.h	2;"	d
-DARKNET19_NSEC	multidnn.h	39;"	d
-DARKNET19_PRIOR	multidnn.h	40;"	d
-DARKNET19_SEC	multidnn.h	38;"	d
+DARKNET19_NSEC	multidnn.h	43;"	d
+DARKNET19_PRIOR	multidnn.h	44;"	d
+DARKNET19_SEC	multidnn.h	42;"	d
 DARKNET_LOC	utils.h	18;"	d
 DATA_H	data.h	2;"	d
 DECONVOLUTIONAL_LAYER_H	deconvolutional_layer.h	2;"	d
@@ -71,13 +71,13 @@ DEMO_CLASSI	multidnn.h	/^typedef struct DEMO_CLASSI {$/;"	s
 DEMO_DETECTOR	multidnn.h	/^typedef struct DEMO_DETECTOR {$/;"	s
 DEMO_H	avees.h	2;"	d
 DEMO_H	demo.h	2;"	d
-DENSENET201_NSEC	multidnn.h	43;"	d
-DENSENET201_PRIOR	multidnn.h	44;"	d
-DENSENET201_SEC	multidnn.h	42;"	d
-DET	multidnn.h	65;"	d
+DENSENET201_NSEC	multidnn.h	47;"	d
+DENSENET201_PRIOR	multidnn.h	48;"	d
+DENSENET201_SEC	multidnn.h	46;"	d
+DET	multidnn.h	69;"	d
 DETECTION_LAYER_H	detection_layer.h	2;"	d
-DETECTOR_CNT	multidnn.h	63;"	d
-DETECTOR_PERIOD	multidnn.h	24;"	d
+DETECTOR_CNT	multidnn.h	67;"	d
+DETECTOR_PERIOD	multidnn.h	28;"	d
 DOABS	region_layer.c	12;"	d	file:
 DROPOUT_LAYER_H	dropout_layer.h	2;"	d
 Darknet	csharp/YoloCSharpWrapper.cs	/^namespace Darknet$/;"	n
@@ -163,15 +163,15 @@ MATRIX_H	matrix.h	2;"	d
 MAXPOOL_LAYER_H	maxpool_layer.h	2;"	d
 MEAS	demo.c	58;"	d	file:
 MEASUREMENT	avees.c	60;"	d	file:
-MEASUREMENT	multidnn.h	13;"	d
-MEASUREMENTC_FILE	multidnn.h	22;"	d
-MEASUREMENTD_FILE	multidnn.h	21;"	d
+MEASUREMENT	multidnn.h	17;"	d
+MEASUREMENTC_FILE	multidnn.h	26;"	d
+MEASUREMENTD_FILE	multidnn.h	25;"	d
 MEASUREMENT_FILE	avees.c	65;"	d	file:
-MEASUREMENT_ITERATION	multidnn.h	17;"	d
+MEASUREMENT_ITERATION	multidnn.h	21;"	d
 MEASUREMENT_PATH	avees.c	64;"	d	file:
-MEASUREMENT_PATH	multidnn.h	20;"	d
+MEASUREMENT_PATH	multidnn.h	24;"	d
 MEAS_	classifier.c	16;"	d	file:
-MEAS_THRESHOLD	multidnn.h	18;"	d
+MEAS_THRESHOLD	multidnn.h	22;"	d
 MINOR_VERSION	version.h	2;"	d
 MJPG_sender	http_stream.cpp	/^    MJPG_sender(int port = 0, int _timeout = 400000, int _quality = 30)$/;"	f	class:MJPG_sender
 MJPG_sender	http_stream.cpp	/^class MJPG_sender$/;"	c	file:
@@ -240,10 +240,10 @@ Put	httplib.h	/^Client::Put(const char *path, const Headers &headers, size_t con
 Put	httplib.h	/^inline Server &Server::Put(const char *pattern, Handler handler) {$/;"	f	class:httplib::Server
 Put	httplib.h	/^inline Server &Server::Put(const char *pattern,$/;"	f	class:httplib::Server
 Put	httplib.h	/^inline std::shared_ptr<Response> Client::Put(const char *path,$/;"	f	class:httplib::Client
-QUANTUM_ITERATION	multidnn.h	15;"	d
-QUANTUM_NSEC	multidnn.h	31;"	d
-QUANTUM_PRIOR	multidnn.h	32;"	d
-QUANTUM_SEC	multidnn.h	30;"	d
+QUANTUM_ITERATION	multidnn.h	19;"	d
+QUANTUM_NSEC	multidnn.h	35;"	d
+QUANTUM_PRIOR	multidnn.h	36;"	d
+QUANTUM_SEC	multidnn.h	34;"	d
 REGION_LAYER_H	region_layer.h	2;"	d
 REORG_LAYER_H	reorg_layer.h	2;"	d
 REORG_OLD_LAYER_H	reorg_old_layer.h	2;"	d
@@ -286,8 +286,8 @@ SocketStream	httplib.h	/^class SocketStream : public Stream {$/;"	c	namespace:ht
 SocketStream	httplib.h	/^inline SocketStream::SocketStream(socket_t sock, time_t read_timeout_sec,$/;"	f	class:httplib::SocketStream
 SortMaster3000	compare.c	/^void SortMaster3000(char *filename, char *weightfile)$/;"	f
 Stream	httplib.h	/^class Stream {$/;"	c	namespace:httplib
-THREAD_SLEEP_NSEC	multidnn.h	69;"	d
-THREAD_SLEEP_SEC	multidnn.h	68;"	d
+THREAD_SLEEP_NSEC	multidnn.h	73;"	d
+THREAD_SLEEP_SEC	multidnn.h	72;"	d
 THRESH	demo.c	59;"	d	file:
 THRESH_	classifier.c	17;"	d	file:
 TILE_K	gemm.c	46;"	d	file:
@@ -313,20 +313,20 @@ WSInit	httplib.h	/^  WSInit() {$/;"	f	class:httplib::detail::WSInit
 WSInit	httplib.h	/^class WSInit {$/;"	c	namespace:httplib::detail
 W_OK	darkunistd.h	23;"	d
 X_OK	darkunistd.h	24;"	d
-YOLOV2T_NSEC	multidnn.h	56;"	d
-YOLOV2T_SEC	multidnn.h	55;"	d
-YOLOV2_NSEC	multidnn.h	50;"	d
-YOLOV2_SEC	multidnn.h	49;"	d
-YOLOV3T_NSEC	multidnn.h	58;"	d
-YOLOV3T_SEC	multidnn.h	57;"	d
-YOLOV3_NSEC	multidnn.h	52;"	d
-YOLOV3_SEC	multidnn.h	51;"	d
-YOLOV4T_NSEC	multidnn.h	60;"	d
-YOLOV4T_SEC	multidnn.h	59;"	d
-YOLOV4_NSEC	multidnn.h	54;"	d
-YOLOV4_SEC	multidnn.h	53;"	d
+YOLOV2T_NSEC	multidnn.h	60;"	d
+YOLOV2T_SEC	multidnn.h	59;"	d
+YOLOV2_NSEC	multidnn.h	54;"	d
+YOLOV2_SEC	multidnn.h	53;"	d
+YOLOV3T_NSEC	multidnn.h	62;"	d
+YOLOV3T_SEC	multidnn.h	61;"	d
+YOLOV3_NSEC	multidnn.h	56;"	d
+YOLOV3_SEC	multidnn.h	55;"	d
+YOLOV4T_NSEC	multidnn.h	64;"	d
+YOLOV4T_SEC	multidnn.h	63;"	d
+YOLOV4_NSEC	multidnn.h	58;"	d
+YOLOV4_SEC	multidnn.h	57;"	d
 YOLO_LAYER_H	yolo_layer.h	2;"	d
-YOLO_PRIOR	multidnn.h	62;"	d
+YOLO_PRIOR	multidnn.h	66;"	d
 YoloLibraryName	csharp/YoloCSharpWrapper.cs	/^        private const string YoloLibraryName = "darknet.dll";$/;"	f	class:Darknet.YoloWrapper	file:
 YoloWrapper	csharp/YoloCSharpWrapper.cs	/^        public YoloWrapper(string configurationFilename, string weightsFilename, int gpu)$/;"	m	class:Darknet.YoloWrapper
 YoloWrapper	csharp/YoloCSharpWrapper.cs	/^    public class YoloWrapper : IDisposable$/;"	c	namespace:Darknet
@@ -572,6 +572,7 @@ class_id	compare.c	/^    int class_id;$/;"	m	struct:__anon8	file:
 class_id	detector.c	/^    int class_id;$/;"	m	struct:__anon11	file:
 classes	compare.c	/^    int classes;$/;"	m	struct:__anon8	file:
 classes	multidnn.h	/^    int classes;$/;"	m	struct:DEMO_DETECTOR
+classi_frame	multidnn.c	/^ImageFrame classi_frame[10];$/;"	v
 classification_display_flag	multidnn.c	/^volatile int classification_display_flag;$/;"	v
 classification_idx	multidnn.c	/^int classification_idx;$/;"	v
 clip_value	gaussian_yolo_layer.c	/^static inline float clip_value(float val, const float max_val)$/;"	f	file:
@@ -674,7 +675,7 @@ ctx_mutex_	httplib.h	/^  std::mutex ctx_mutex_;$/;"	m	class:httplib::SSLClient
 ctx_mutex_	httplib.h	/^  std::mutex ctx_mutex_;$/;"	m	class:httplib::SSLServer
 cublas_check_error	dark_cuda.c	/^void cublas_check_error(cublasStatus_t status)$/;"	f
 cublas_check_error_extended	dark_cuda.c	/^void cublas_check_error_extended(cublasStatus_t status, const char *file, int line, const char *date_time)$/;"	f
-cudaEventWaitDefault	dark_cuda.c	357;"	d	file:
+cudaEventWaitDefault	dark_cuda.c	336;"	d	file:
 cuda_compare	dark_cuda.c	/^float cuda_compare(float *x_gpu, float *x, size_t n, char *s)$/;"	f
 cuda_debug_sync	dark_cuda.c	/^int cuda_debug_sync = 0;$/;"	v
 cuda_free	dark_cuda.c	/^void cuda_free(float *x_gpu)$/;"	f
@@ -899,7 +900,7 @@ ext_output	multidnn.h	/^    int ext_output;$/;"	m	struct:DEMO_DETECTOR
 extract_cifar	cifar.c	/^void extract_cifar()$/;"	f
 extract_voxel	voxel.c	/^void extract_voxel(char *lfile, char *rfile, char *prefix)$/;"	f
 fetch_array	avees.c	/^double fetch_array[CYCLE_IDX];$/;"	v
-fetch_frame	multidnn.c	/^ImageFrame fetch_frame[3];$/;"	v
+fetch_frame	multidnn.c	/^ImageFrame fetch_frame[10];$/;"	v
 fetch_idx	multidnn.c	/^int fetch_idx;$/;"	v
 fetch_in_thread	demo.c	/^void *fetch_in_thread(void *ptr)$/;"	f
 fetch_in_thread_sync	demo.c	/^void *fetch_in_thread_sync(void *ptr)$/;"	f
@@ -1540,7 +1541,6 @@ multi_detect_in_thread	multidnn.c	/^void *multi_detect_in_thread(void *ptr)$/;"	
 multi_display_in_thread	multidnn.c	/^void *multi_display_in_thread(void *arg)$/;"	f
 multi_display_in_thread_sync	multidnn.c	/^void *multi_display_in_thread_sync(void *ptr)$/;"	f
 multi_fetch_in_thread	multidnn.c	/^void *multi_fetch_in_thread(void *ptr)$/;"	f
-multi_get_cuda_stream	dark_cuda.c	/^cudaStream_t multi_get_cuda_stream(DNN_Info dnn_info) {$/;"	f
 multi_get_wall_time	multidnn.c	/^double multi_get_wall_time()$/;"	f
 multi_network_predict	network.c	/^float *multi_network_predict(network net, float *input, DNN_Info dnn_info)$/;"	f
 mutex	data.c	/^pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;$/;"	v
